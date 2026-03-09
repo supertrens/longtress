@@ -199,6 +199,12 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          .cart-item-card { padding: 16px !important; gap: 14px !important; }
+          .cart-item-header { flex-direction: column !important; justify-content: flex-start !important; gap: 6px !important; }
+        }
+      `}</style>
     </div>
   );
 }
