@@ -349,60 +349,75 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Mobile nav slide-in */}
+      {/* Mobile nav — full screen */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            style={{
+              position: "fixed", inset: 0,
+              background: "#5C2A0A",
+              zIndex: 99,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            }}
+          >
+            {/* Logo top-left */}
+            <div style={{ position: "absolute", top: 22, left: 24, fontFamily: "'Playfair Display', serif", color: "#C89B3C", fontWeight: 700, fontSize: 22, letterSpacing: "0.1em" }}>
+              LONGTRESS
+            </div>
+
+            {/* Close button top-right */}
+            <button
               onClick={() => setMobileMenuOpen(false)}
-              style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 98 }}
-            />
-            {/* Panel */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              style={{
-                position: "fixed", top: 0, right: 0, bottom: 0, width: "72%", maxWidth: 280,
-                background: "rgba(92,42,10,0.98)", backdropFilter: "blur(20px)",
-                zIndex: 99, padding: "88px 28px 32px",
-                display: "flex", flexDirection: "column", gap: 0,
-                boxShadow: "-8px 0 40px rgba(0,0,0,0.35)",
-              }}
+              style={{ position: "absolute", top: 18, right: 20, background: "none", border: "none", color: "#C89B3C", cursor: "pointer", padding: 8, lineHeight: 0 }}
+              aria-label="Close menu"
             >
-              {NAV_LINKS.map((l) => (
-                <a
+              <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Nav links */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", paddingBottom: 16 }}>
+              {NAV_LINKS.map((l, idx) => (
+                <motion.a
                   key={l.label}
                   href={l.href}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.06, duration: 0.3 }}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
-                    color: "#FBF6F0", fontSize: 18, fontFamily: "'Playfair Display', serif",
-                    fontWeight: 600, textDecoration: "none",
-                    padding: "15px 0", borderBottom: "1px solid rgba(200,155,60,0.12)",
+                    color: "#FBF6F0", fontSize: 28, fontFamily: "'Playfair Display', serif",
+                    fontWeight: 700, textDecoration: "none",
+                    padding: "14px 0", textAlign: "center", width: "100%",
+                    borderBottom: "1px solid rgba(200,155,60,0.1)",
                   }}
                 >
                   {l.label}
-                </a>
+                </motion.a>
               ))}
-              <a
+
+              <motion.a
                 href="#order"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: NAV_LINKS.length * 0.06 + 0.05 }}
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
-                  marginTop: 24, display: "flex", alignItems: "center", justifyContent: "center",
-                  padding: "13px 24px", borderRadius: 999, fontWeight: 600, fontSize: 14,
+                  marginTop: 32, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  padding: "15px 52px", borderRadius: 999, fontWeight: 700, fontSize: 16,
                   background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A",
-                  textDecoration: "none",
+                  textDecoration: "none", boxShadow: "0 8px 28px rgba(200,155,60,0.35)",
                 }}
               >
                 Shop Now — $38
-              </a>
-            </motion.div>
-          </>
+              </motion.a>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -527,7 +542,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{ justifyContent: "center", alignItems: "center" }}>
-            <div style={{ position: "relative", width: 400, height: 500 }}>
+            <div className="hero-blob" style={{ position: "relative", width: 400, height: 500 }}>
               {/* Blob frame — product photo fills the organic shape */}
               <div style={{
                 position: "absolute", inset: 0,
@@ -547,6 +562,7 @@ export default function Home() {
 
               {/* Floating review card */}
               <motion.div
+                className="hero-float-card"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.1, duration: 0.6 }}
@@ -574,6 +590,7 @@ export default function Home() {
 
               {/* Rating badge */}
               <motion.div
+                className="hero-float-badge"
                 initial={{ scale: 0, rotate: 20 }}
                 animate={{ scale: 1, rotate: -8 }}
                 transition={{ delay: 0.9, duration: 0.5, type: "spring", stiffness: 180 }}
@@ -1050,8 +1067,11 @@ export default function Home() {
           .hidden-mobile { display: none !important; }
           .announcement-bar { display: none !important; }
           .mobile-menu-btn { display: flex !important; align-items: center; }
-          .hero-grid { grid-template-columns: 1fr !important; padding-top: 96px !important; }
-          .hero-bottle { display: none !important; }
+          .hero-grid { grid-template-columns: 1fr !important; padding-top: 80px !important; gap: 24px !important; }
+          .hero-bottle { order: -1; justify-content: center !important; }
+          .hero-blob { width: 260px !important; height: 320px !important; }
+          .hero-float-card { display: none !important; }
+          .hero-float-badge { display: none !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .benefits-grid { grid-template-columns: 1fr !important; }
           .order-grid { grid-template-columns: 1fr !important; }
