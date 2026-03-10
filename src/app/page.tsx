@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
@@ -86,11 +87,12 @@ const REVIEWS = [
     weeksUsed: 12,
     result: "3 inches of new growth",
     resultIcon: "📏",
-    resultColor: "#2D5240",
-    resultBg: "rgba(45,82,64,0.12)",
+    resultColor: "#7A3C14",
+    resultBg: "rgba(62,28,11,0.12)",
     tags: ["Edge regrowth", "Less breakage"],
     text: "My hair has never been this thick and healthy. I've been using Longtress for 3 months and I can already see so much new growth. The oil is lightweight — no greasy residue at all.",
     phase: "After 12 weeks",
+    image: "/review-1.jpeg",
   },
   {
     name: "Monique B.",
@@ -99,11 +101,12 @@ const REVIEWS = [
     weeksUsed: 6,
     result: "Scalp issues gone",
     resultIcon: "🌿",
-    resultColor: "#8B6914",
+    resultColor: "#8B5020",
     resultBg: "rgba(200,155,60,0.12)",
     tags: ["Scalp health", "Shine boost"],
     text: "After 6 weeks my scalp is completely clear — no flaking, no irritation. My curls are more defined and the moisture retention is insane. I apply it every wash day.",
     phase: "After 6 weeks",
+    image: "/review-2.jpeg",
   },
   {
     name: "Aaliyah R.",
@@ -112,11 +115,12 @@ const REVIEWS = [
     weeksUsed: 4,
     result: "Edges visibly filled in",
     resultIcon: "✨",
-    resultColor: "#1E3A2F",
-    resultBg: "rgba(30,58,47,0.12)",
+    resultColor: "#5C2A0A",
+    resultBg: "rgba(92,42,10,0.12)",
     tags: ["Edges back", "Thicker density"],
     text: "After just 4 weeks my edges are filling back in from stress-related loss. I apply it at night before braiding. The results are real — my stylist noticed before I even told her.",
     phase: "After 4 weeks",
+    image: "/review-3.jpeg",
   },
 ];
 
@@ -169,16 +173,16 @@ function BottleSVG({ width = 140, height = 220 }: { width?: number; height?: num
     <svg width={width} height={height} viewBox="0 0 140 220" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="52" y="10" width="36" height="22" rx="6" fill="#C89B3C" />
       <rect x="56" y="8" width="28" height="6" rx="3" fill="#A07828" />
-      <rect x="58" y="30" width="24" height="20" rx="4" fill="#2D5240" />
-      <path d="M50 50 Q38 62 36 80 H104 Q102 62 90 50 Z" fill="#2D5240" />
-      <rect x="30" y="78" width="80" height="112" rx="16" fill="#2D5240" />
+      <rect x="58" y="30" width="24" height="20" rx="4" fill="#7A3C14" />
+      <path d="M50 50 Q38 62 36 80 H104 Q102 62 90 50 Z" fill="#7A3C14" />
+      <rect x="30" y="78" width="80" height="112" rx="16" fill="#7A3C14" />
       <rect x="38" y="95" width="64" height="80" rx="8" fill="rgba(249,243,232,0.08)" stroke="rgba(200,155,60,0.35)" strokeWidth="1.5" />
       <text x="70" y="118" textAnchor="middle" fill="#C89B3C" fontSize="11" fontFamily="Georgia, serif" fontWeight="bold">LONGTRESS</text>
       <text x="70" y="132" textAnchor="middle" fill="rgba(249,243,232,0.6)" fontSize="7" fontFamily="Arial, sans-serif" letterSpacing="2">HAITIAN OIL</text>
       <ellipse cx="70" cy="150" rx="14" ry="5" fill="none" stroke="rgba(200,155,60,0.5)" strokeWidth="1" />
       <line x1="70" y1="145" x2="70" y2="155" stroke="rgba(200,155,60,0.5)" strokeWidth="1" />
       <text x="70" y="168" textAnchor="middle" fill="rgba(249,243,232,0.4)" fontSize="7" fontFamily="Arial, sans-serif">120 mL / 4 fl oz</text>
-      <rect x="30" y="188" width="80" height="4" rx="2" fill="#1E3A2F" />
+      <rect x="30" y="188" width="80" height="4" rx="2" fill="#5C2A0A" />
       <rect x="36" y="82" width="10" height="100" rx="5" fill="rgba(255,255,255,0.06)" />
     </svg>
   );
@@ -187,11 +191,11 @@ function BottleSVG({ width = 140, height = 220 }: { width?: number; height?: num
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="faq" style={{ padding: "96px 24px", background: "#F0E8D4" }}>
+    <section id="faq" style={{ padding: "96px 24px", background: "#F5EBDC" }}>
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>Got Questions?</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
             Frequently Asked Questions
           </h2>
         </div>
@@ -202,7 +206,7 @@ function FAQSection() {
                 style={{
                   borderRadius: 16, overflow: "hidden",
                   background: "#fff", border: "1px solid rgba(200,155,60,0.15)",
-                  boxShadow: "0 2px 12px rgba(30,58,47,0.05)",
+                  boxShadow: "0 2px 12px rgba(92,42,10,0.05)",
                 }}>
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
@@ -211,7 +215,7 @@ function FAQSection() {
                     padding: "20px 24px", background: "none", border: "none", cursor: "pointer",
                     textAlign: "left", gap: 16,
                   }}>
-                  <span style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 16, fontWeight: 600 }}>
+                  <span style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 16, fontWeight: 600 }}>
                     {faq.q}
                   </span>
                   <motion.span
@@ -230,7 +234,7 @@ function FAQSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       style={{ overflow: "hidden" }}>
-                      <div style={{ padding: "0 24px 20px", color: "#3A6B52", fontSize: 14, lineHeight: 1.8, borderTop: "1px solid rgba(200,155,60,0.1)" }}>
+                      <div style={{ padding: "0 24px 20px", color: "#9B6535", fontSize: 14, lineHeight: 1.8, borderTop: "1px solid rgba(200,155,60,0.1)" }}>
                         <div style={{ paddingTop: 16 }}>{faq.a}</div>
                       </div>
                     </motion.div>
@@ -265,12 +269,12 @@ export default function Home() {
   };
 
   return (
-    <div style={{ background: "#F9F3E8", color: "#1E3A2F", fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div style={{ background: "#FBF6F0", color: "#5C2A0A", fontFamily: "'Inter', system-ui, sans-serif" }}>
 
       {/* NAV */}
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        background: scrolled ? "rgba(30,58,47,0.97)" : "transparent",
+        background: scrolled ? "rgba(92,42,10,0.97)" : "transparent",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         boxShadow: scrolled ? "0 2px 24px rgba(0,0,0,0.2)" : "none",
         transition: "all 0.3s ease",
@@ -278,8 +282,8 @@ export default function Home() {
         {/* Announcement bar */}
         {!scrolled && (
           <div style={{
-            background: "linear-gradient(90deg, #C89B3C, #E8B84B)",
-            color: "#1E3A2F", textAlign: "center", fontSize: 12, fontWeight: 600,
+            background: "linear-gradient(90deg, #C89B3C, #E8B848)",
+            color: "#5C2A0A", textAlign: "center", fontSize: 12, fontWeight: 600,
             padding: "8px 24px", letterSpacing: "0.03em",
           }}>
             🌿 Free shipping on orders $60+ &nbsp;·&nbsp; Use <strong>GROW10</strong> for 10% off &nbsp;·&nbsp; 30-day money-back guarantee
@@ -295,7 +299,7 @@ export default function Home() {
           <div style={{ display: "flex", gap: 32, alignItems: "center" }} className="hidden-mobile">
             {NAV_LINKS.map((l) => (
               <a key={l.label} href={l.href} style={{
-                color: scrolled ? "#E8B84B" : "#F9F3E8",
+                color: scrolled ? "#E8B848" : "#FBF6F0",
                 textDecoration: "none", fontSize: 13, fontWeight: 500, letterSpacing: "0.05em",
               }}>
                 {l.label}
@@ -306,7 +310,7 @@ export default function Home() {
           <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
             <Link href="/cart" style={{
               display: "flex", alignItems: "center", gap: 6,
-              background: "#C89B3C", color: "#1E3A2F",
+              background: "#C89B3C", color: "#5C2A0A",
               padding: "8px 18px", borderRadius: 999, fontSize: 13, fontWeight: 600,
               textDecoration: "none", position: "relative",
             }}>
@@ -318,7 +322,7 @@ export default function Home() {
                 <span style={{
                   position: "absolute", top: -6, right: -6,
                   width: 20, height: 20, borderRadius: 999,
-                  background: "#1E3A2F", color: "#F9F3E8",
+                  background: "#5C2A0A", color: "#FBF6F0",
                   fontSize: 11, fontWeight: 700,
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
@@ -333,7 +337,7 @@ export default function Home() {
       {/* HERO */}
       <section style={{
         minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden",
-        background: "linear-gradient(160deg, #1E3A2F 0%, #2D5240 55%, #1a3228 100%)",
+        background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 55%, #180C04 100%)",
       }}>
         {/* Dot pattern */}
         <div style={{
@@ -343,7 +347,7 @@ export default function Home() {
         }} />
         {/* Glow blobs */}
         <div style={{ position: "absolute", top: 80, right: 40, width: 280, height: 280, borderRadius: "50%", background: "#C89B3C", opacity: 0.08, filter: "blur(60px)" }} />
-        <div style={{ position: "absolute", bottom: 80, left: 40, width: 200, height: 200, borderRadius: "50%", background: "#E8B84B", opacity: 0.08, filter: "blur(60px)" }} />
+        <div style={{ position: "absolute", bottom: 80, left: 40, width: 200, height: 200, borderRadius: "50%", background: "#E8B848", opacity: 0.08, filter: "blur(60px)" }} />
 
         <div className="hero-grid" style={{ position: "relative", maxWidth: 1152, margin: "0 auto", padding: "96px 24px 64px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
           {/* Text column */}
@@ -355,7 +359,7 @@ export default function Home() {
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: 500, marginBottom: 24,
-                background: "rgba(200,155,60,0.15)", color: "#E8B84B", border: "1px solid rgba(200,155,60,0.3)",
+                background: "rgba(200,155,60,0.15)", color: "#E8B848", border: "1px solid rgba(200,155,60,0.3)",
               }}>
               🇭🇹 Rooted in Haitian Tradition
             </motion.div>
@@ -366,11 +370,11 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                color: "#F9F3E8", fontWeight: 700,
+                color: "#FBF6F0", fontWeight: 700,
                 fontSize: "clamp(42px, 6vw, 72px)", lineHeight: 1.1, marginBottom: 24,
               }}>
               Hair Oil That{" "}
-              <em style={{ fontStyle: "italic", background: "linear-gradient(135deg, #C89B3C, #E8B84B)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <em style={{ fontStyle: "italic", color: "#E8B848" }}>
                 Nourishes
               </em>{" "}
               From Root to Tip
@@ -406,7 +410,7 @@ export default function Home() {
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
                   padding: "14px 32px", borderRadius: 999, fontWeight: 600, fontSize: 15,
-                  background: "linear-gradient(135deg, #C89B3C, #E8B84B)", color: "#1E3A2F",
+                  background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A",
                   textDecoration: "none", boxShadow: "0 8px 32px rgba(200,155,60,0.4)",
                 }}>
                 Shop Now — $38
@@ -420,7 +424,7 @@ export default function Home() {
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
                   padding: "14px 28px", borderRadius: 999, fontWeight: 500, fontSize: 15,
-                  color: "#F9F3E8", textDecoration: "none", border: "1px solid rgba(249,243,232,0.2)",
+                  color: "#FBF6F0", textDecoration: "none", border: "1px solid rgba(249,243,232,0.2)",
                 }}>
                 Learn More
               </motion.a>
@@ -452,36 +456,22 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <div style={{ position: "relative", width: 400, height: 500 }}>
-              {/* Background frame — simulates lifestyle product photography */}
+              {/* Blob frame — product photo fills the organic shape */}
               <div style={{
                 position: "absolute", inset: 0,
                 borderRadius: "46% 54% 58% 42% / 42% 46% 54% 58%",
-                background: "linear-gradient(145deg, #1a0d05 0%, #0d1408 50%, #0a1a10 100%)",
                 overflow: "hidden",
               }}>
-                <div style={{ position: "absolute", top: -40, right: -40, width: 320, height: 320, background: "radial-gradient(ellipse, rgba(200,155,60,0.28) 0%, transparent 68%)", filter: "blur(28px)" }} />
-                <div style={{ position: "absolute", bottom: -20, left: -20, width: 220, height: 220, background: "radial-gradient(ellipse, rgba(10,30,18,0.7) 0%, transparent 70%)", filter: "blur(20px)" }} />
-                {/* Botanical leaf SVGs */}
-                <svg style={{ position: "absolute", top: 16, left: 8, opacity: 0.18 }} width="110" height="170" viewBox="0 0 110 170" fill="none">
-                  <path d="M55 8 C18 36, 4 76, 14 124 C19 152, 46 168, 55 168 C64 168, 91 152, 96 124 C106 76, 92 36, 55 8Z" fill="#C89B3C"/>
-                  <line x1="55" y1="8" x2="55" y2="168" stroke="#C89B3C" strokeWidth="1.2" opacity="0.5"/>
-                  {[35,55,75,95,115,135].map(y => (
-                    <line key={y} x1="55" y1={y} x2="20" y2={y} stroke="#C89B3C" strokeWidth="0.8" opacity="0.4"/>
-                  ))}
-                </svg>
-                <svg style={{ position: "absolute", bottom: 24, right: 12, opacity: 0.12, transform: "scaleX(-1) rotate(15deg)" }} width="80" height="120" viewBox="0 0 110 170" fill="none">
-                  <path d="M55 8 C18 36, 4 76, 14 124 C19 152, 46 168, 55 168 C64 168, 91 152, 96 124 C106 76, 92 36, 55 8Z" fill="#C89B3C"/>
-                </svg>
+                {/* Real product photo as background */}
+                <Image
+                  src="/product-1.jpeg"
+                  alt="Longtress Haitian Hair Oil"
+                  fill
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+                {/* Subtle golden glow overlay */}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(200,155,60,0.12) 0%, transparent 60%, rgba(92,42,10,0.35) 100%)" }} />
               </div>
-
-              {/* Bottle — floating */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -52%)", zIndex: 2 }}>
-                <div style={{ position: "absolute", inset: -40, background: "radial-gradient(circle, rgba(200,155,60,0.22), transparent 68%)", filter: "blur(24px)", borderRadius: "50%" }} />
-                <BottleSVG width={170} height={270} />
-              </motion.div>
 
               {/* Floating review card */}
               <motion.div
@@ -498,14 +488,14 @@ export default function Home() {
                 <div style={{ display: "flex", gap: 2, marginBottom: 6 }}>
                   {[1,2,3,4,5].map(i => <span key={i} style={{ color: "#C89B3C", fontSize: 11 }}>★</span>)}
                 </div>
-                <p style={{ fontSize: 12, color: "#1E3A2F", lineHeight: 1.55, marginBottom: 8, fontStyle: "italic" }}>
+                <p style={{ fontSize: 12, color: "#5C2A0A", lineHeight: 1.55, marginBottom: 8, fontStyle: "italic" }}>
                   "My edges are completely back after 4 weeks!"
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg, #C89B3C, #E8B84B)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#1E3A2F", flexShrink: 0 }}>A</div>
+                  <div style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg, #C89B3C, #E8B848)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#5C2A0A", flexShrink: 0 }}>A</div>
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "#1E3A2F" }}>Aaliyah R.</div>
-                    <div style={{ fontSize: 10, color: "#3A6B52" }}>✓ Verified Purchase</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "#5C2A0A" }}>Aaliyah R.</div>
+                    <div style={{ fontSize: 10, color: "#9B6535" }}>✓ Verified Purchase</div>
                   </div>
                 </div>
               </motion.div>
@@ -517,10 +507,10 @@ export default function Home() {
                 transition={{ delay: 0.9, duration: 0.5, type: "spring", stiffness: 180 }}
                 style={{
                   position: "absolute", top: 32, right: -20, zIndex: 3,
-                  background: "linear-gradient(135deg, #C89B3C, #E8B84B)",
+                  background: "linear-gradient(135deg, #C89B3C, #E8B848)",
                   borderRadius: "50%", width: 84, height: 84,
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 8px 28px rgba(200,155,60,0.5)", color: "#1E3A2F",
+                  boxShadow: "0 8px 28px rgba(200,155,60,0.5)", color: "#5C2A0A",
                 }}>
                 <span style={{ fontSize: 22, fontWeight: 800, lineHeight: 1 }}>4.9</span>
                 <span style={{ fontSize: 13 }}>⭐</span>
@@ -532,7 +522,7 @@ export default function Home() {
       </section>
 
       {/* STATS STRIP */}
-      <section style={{ background: "#1E3A2F" }}>
+      <section style={{ background: "#5C2A0A" }}>
         <div className="stats-grid" style={{ maxWidth: 1152, margin: "0 auto", padding: "40px 24px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32, textAlign: "center" }}>
           {[
             { val: "2,400+", label: "Happy Customers" },
@@ -549,14 +539,14 @@ export default function Home() {
       </section>
 
       {/* PRESS BAR */}
-      <section style={{ background: "#F0E8D4", padding: "28px 24px", borderBottom: "1px solid rgba(200,155,60,0.15)" }}>
+      <section style={{ background: "#F5EBDC", padding: "28px 24px", borderBottom: "1px solid rgba(200,155,60,0.15)" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", gap: 36, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, color: "#3A6B52", letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600, flexShrink: 0 }}>As Seen In</span>
-          <div style={{ width: 1, height: 22, background: "rgba(30,58,47,0.18)", flexShrink: 0 }} />
+          <span style={{ fontSize: 11, color: "#9B6535", letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600, flexShrink: 0 }}>As Seen In</span>
+          <div style={{ width: 1, height: 22, background: "rgba(92,42,10,0.18)", flexShrink: 0 }} />
           {["Essence", "NaturallyCurly", "Vogue Beauty", "Black Enterprise", "Allure"].map((name) => (
             <span key={name} style={{
               fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 700,
-              color: "rgba(30,58,47,0.32)", letterSpacing: "0.04em",
+              color: "rgba(92,42,10,0.32)", letterSpacing: "0.04em",
               transition: "color 0.2s",
             }}>
               {name}
@@ -566,11 +556,11 @@ export default function Home() {
       </section>
 
       {/* BENEFITS */}
-      <section id="benefits" style={{ padding: "96px 24px", background: "#F9F3E8" }}>
+      <section id="benefits" style={{ padding: "96px 24px", background: "#FBF6F0" }}>
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>Why Longtress</span>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12, marginBottom: 0 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12, marginBottom: 0 }}>
               Benefits Your Hair <em style={{ color: "#C89B3C" }}>Deserves</em>
             </h2>
           </div>
@@ -578,20 +568,20 @@ export default function Home() {
             {BENEFITS.map((b, i) => (
               <FadeUp key={b.title} delay={i * 0.12}>
                 <motion.div
-                  whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(30,58,47,0.12)" }}
+                  whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(92,42,10,0.12)" }}
                   transition={{ duration: 0.2 }}
                   style={{
                     padding: 32, borderRadius: 20,
-                    background: i % 2 === 0 ? "#fff" : "#F0E8D4",
+                    background: i % 2 === 0 ? "#fff" : "#F5EBDC",
                     border: "1px solid rgba(200,155,60,0.12)",
-                    boxShadow: "0 2px 16px rgba(30,58,47,0.06)",
+                    boxShadow: "0 2px 16px rgba(92,42,10,0.06)",
                   }}>
                   <motion.div
                     animate={{ rotate: [0, 5, -5, 0] }}
                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                     style={{ fontSize: 36, marginBottom: 16, display: "inline-block" }}>{b.icon}</motion.div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 20, fontWeight: 600, marginBottom: 8 }}>{b.title}</h3>
-                  <p style={{ color: "#3A6B52", fontSize: 14, lineHeight: 1.7 }}>{b.desc}</p>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 20, fontWeight: 600, marginBottom: 8 }}>{b.title}</h3>
+                  <p style={{ color: "#9B6535", fontSize: 14, lineHeight: 1.7 }}>{b.desc}</p>
                 </motion.div>
               </FadeUp>
             ))}
@@ -600,12 +590,12 @@ export default function Home() {
       </section>
 
       {/* PRODUCT / ORDER */}
-      <section id="order" style={{ padding: "96px 24px", background: "linear-gradient(160deg, #1E3A2F 0%, #2D5240 100%)" }}>
+      <section id="order" style={{ padding: "96px 24px", background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 100%)" }}>
         <div className="order-grid" style={{ maxWidth: 1152, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           {/* Details */}
           <div>
             <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>The Product</span>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#F9F3E8", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12, marginBottom: 24, lineHeight: 1.15 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FBF6F0", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12, marginBottom: 24, lineHeight: 1.15 }}>
               Longtress<br /><em style={{ color: "#C89B3C" }}>Haitian Hair Oil</em>
             </h2>
             <p style={{ color: "rgba(249,243,232,0.7)", fontSize: 15, lineHeight: 1.8, marginBottom: 28 }}>
@@ -631,15 +621,15 @@ export default function Home() {
             <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 16 }}>
               <div style={{ display: "flex", alignItems: "center", border: "1px solid rgba(200,155,60,0.3)", borderRadius: 999, overflow: "hidden", background: "rgba(249,243,232,0.05)" }}>
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} style={{ width: 40, height: 48, background: "none", border: "none", color: "#C89B3C", fontSize: 20, cursor: "pointer" }}>−</button>
-                <span style={{ width: 32, textAlign: "center", color: "#F9F3E8", fontWeight: 500 }}>{qty}</span>
+                <span style={{ width: 32, textAlign: "center", color: "#FBF6F0", fontWeight: 500 }}>{qty}</span>
                 <button onClick={() => setQty((q) => q + 1)} style={{ width: 40, height: 48, background: "none", border: "none", color: "#C89B3C", fontSize: 20, cursor: "pointer" }}>+</button>
               </div>
               <button
                 onClick={handleAddToCart}
                 style={{
                   flex: 1, height: 48, borderRadius: 999, fontWeight: 600, fontSize: 14, cursor: "pointer", border: "none",
-                  background: addedToCart ? "rgba(249,243,232,0.08)" : "linear-gradient(135deg, #C89B3C, #E8B84B)",
-                  color: addedToCart ? "#C89B3C" : "#1E3A2F",
+                  background: addedToCart ? "rgba(249,243,232,0.08)" : "linear-gradient(135deg, #C89B3C, #E8B848)",
+                  color: addedToCart ? "#C89B3C" : "#5C2A0A",
                   boxShadow: addedToCart ? "none" : "0 8px 24px rgba(200,155,60,0.4)",
                   transition: "all 0.3s ease",
                 }}
@@ -667,10 +657,13 @@ export default function Home() {
             <div style={{ position: "relative" }}>
               <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,155,60,0.2), transparent 70%)", filter: "blur(40px)", transform: "scale(1.5)" }} />
               <div style={{
-                position: "relative", padding: 48, borderRadius: 32,
+                position: "relative", padding: 20, borderRadius: 32,
                 background: "rgba(249,243,232,0.04)", border: "1px solid rgba(200,155,60,0.15)", backdropFilter: "blur(8px)",
               }}>
-                <BottleSVG width={180} height={280} />
+                {/* Image fills the inner rounded square */}
+                <div style={{ position: "relative", width: 280, height: 280, borderRadius: 18, overflow: "hidden" }}>
+                  <Image src="/product-2.jpeg" alt="Longtress Haitian Hair Oil" fill style={{ objectFit: "cover", objectPosition: "center" }} />
+                </div>
               </div>
             </div>
           </div>
@@ -678,11 +671,11 @@ export default function Home() {
       </section>
 
       {/* INGREDIENTS */}
-      <section id="ingredients" style={{ padding: "96px 24px", background: "#F0E8D4" }}>
+      <section id="ingredients" style={{ padding: "96px 24px", background: "#F5EBDC" }}>
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>Purity First</span>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
               {"What's Inside"}
             </h2>
           </div>
@@ -690,10 +683,10 @@ export default function Home() {
             {INGREDIENTS.map((ing, i) => (
               <FadeUp key={ing.name} delay={i * 0.08}>
                 <motion.div
-                  whileHover={{ y: -3, boxShadow: "0 8px 24px rgba(30,58,47,0.1)" }}
+                  whileHover={{ y: -3, boxShadow: "0 8px 24px rgba(92,42,10,0.1)" }}
                   style={{
                     padding: 24, borderRadius: 20, display: "flex", gap: 16, alignItems: "flex-start",
-                    background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)",
+                    background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)",
                   }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
@@ -704,8 +697,8 @@ export default function Home() {
                     {i + 1}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 14, color: "#1E3A2F", marginBottom: 4 }}>{ing.name}</div>
-                    <div style={{ fontSize: 12, color: "#3A6B52", lineHeight: 1.6 }}>{ing.note}</div>
+                    <div style={{ fontWeight: 600, fontSize: 14, color: "#5C2A0A", marginBottom: 4 }}>{ing.name}</div>
+                    <div style={{ fontSize: 12, color: "#9B6535", lineHeight: 1.6 }}>{ing.note}</div>
                   </div>
                 </motion.div>
               </FadeUp>
@@ -715,11 +708,11 @@ export default function Home() {
       </section>
 
       {/* HOW TO USE */}
-      <section id="how-to-use" style={{ padding: "96px 24px", background: "#F9F3E8" }}>
+      <section id="how-to-use" style={{ padding: "96px 24px", background: "#FBF6F0" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>The Ritual</span>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
               How to Use
             </h2>
           </div>
@@ -731,7 +724,7 @@ export default function Home() {
                     whileHover={{ scale: 1.08, rotate: 3 }}
                     style={{
                       width: 64, height: 64, flexShrink: 0, borderRadius: 20,
-                      background: "linear-gradient(135deg, #1E3A2F, #2D5240)",
+                      background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
                       color: "#C89B3C", display: "flex", alignItems: "center", justifyContent: "center",
                       fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700,
                       border: "1px solid rgba(200,155,60,0.2)", cursor: "default",
@@ -739,8 +732,8 @@ export default function Home() {
                     {step.num}
                   </motion.div>
                   <div style={{ paddingTop: 8 }}>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 20, fontWeight: 600, marginBottom: 8 }}>{step.title}</h3>
-                    <p style={{ color: "#3A6B52", fontSize: 14, lineHeight: 1.8 }}>{step.desc}</p>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 20, fontWeight: 600, marginBottom: 8 }}>{step.title}</h3>
+                    <p style={{ color: "#9B6535", fontSize: 14, lineHeight: 1.8 }}>{step.desc}</p>
                   </div>
                 </div>
               </FadeUp>
@@ -753,11 +746,11 @@ export default function Home() {
       <FAQSection />
 
       {/* REVIEWS */}
-      <section id="reviews" style={{ padding: "96px 24px", background: "#1E3A2F" }}>
+      <section id="reviews" style={{ padding: "96px 24px", background: "#5C2A0A" }}>
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span style={{ color: "#C89B3C", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 500 }}>Real Results</span>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#F9F3E8", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#FBF6F0", fontSize: "clamp(32px, 4vw, 48px)", marginTop: 12 }}>
               Hair Transformations
             </h2>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 16 }}>
@@ -778,69 +771,33 @@ export default function Home() {
                     display: "flex", flexDirection: "column", height: "100%",
                   }}>
 
-                  {/* Hair Result Visual */}
-                  <div style={{
-                    padding: "24px 24px 20px",
-                    background: "linear-gradient(135deg, rgba(249,243,232,0.07), rgba(200,155,60,0.06))",
-                    borderBottom: "1px solid rgba(200,155,60,0.1)",
-                  }}>
-                    {/* Before → After strip */}
-                    <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-                      {/* Before */}
-                      <div style={{ flex: 1, textAlign: "center" }}>
-                        <div style={{
-                          height: 64, borderRadius: 12, marginBottom: 6,
-                          background: "linear-gradient(160deg, #2a1a0a, #3d2612)",
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          border: "1px solid rgba(255,255,255,0.06)",
-                          position: "relative", overflow: "hidden",
-                        }}>
-                          {/* Hair strand lines */}
-                          {[20,35,50,65,80].map((x) => (
-                            <div key={x} style={{ position: "absolute", left: `${x}%`, top: 0, bottom: 0, width: 1.5, background: "rgba(80,40,10,0.6)", borderRadius: 99 }} />
-                          ))}
-                          <span style={{ fontSize: 18, position: "relative", zIndex: 1 }}>💇</span>
-                        </div>
-                        <span style={{ fontSize: 10, color: "rgba(249,243,232,0.3)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Before</span>
-                      </div>
-
-                      {/* Arrow */}
-                      <div style={{ display: "flex", alignItems: "center", paddingBottom: 20 }}>
-                        <svg width="20" height="20" fill="none" stroke="#C89B3C" viewBox="0 0 24 24" style={{ opacity: 0.6 }}>
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </div>
-
-                      {/* After */}
-                      <div style={{ flex: 1, textAlign: "center" }}>
-                        <div style={{
-                          height: 64, borderRadius: 12, marginBottom: 6,
-                          background: "linear-gradient(160deg, #1a0d05, #2a1a08)",
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          border: "1px solid rgba(200,155,60,0.2)",
-                          position: "relative", overflow: "hidden",
-                        }}>
-                          {/* Fuller hair strand lines */}
-                          {[12,22,32,42,52,62,72,82,88].map((x) => (
-                            <div key={x} style={{ position: "absolute", left: `${x}%`, top: 0, bottom: 0, width: 2, background: "rgba(140,80,20,0.5)", borderRadius: 99 }} />
-                          ))}
-                          <span style={{ fontSize: 22, position: "relative", zIndex: 1 }}>✨</span>
-                        </div>
-                        <span style={{ fontSize: 10, color: "#C89B3C", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>{r.phase}</span>
-                      </div>
-                    </div>
-
-                    {/* Result badge */}
+                  {/* Review Photo */}
+                  <div style={{ position: "relative", width: "100%", height: 220, overflow: "hidden", borderRadius: "20px 20px 0 0" }}>
+                    <Image
+                      src={r.image}
+                      alt={`${r.name} review photo`}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                    {/* Phase badge overlay */}
                     <div style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      padding: "10px 14px", borderRadius: 12,
-                      background: r.resultBg, border: `1px solid rgba(200,155,60,0.15)`,
+                      position: "absolute", bottom: 12, right: 12,
+                      background: "rgba(92,42,10,0.85)", backdropFilter: "blur(8px)",
+                      borderRadius: 999, padding: "5px 12px",
+                      fontSize: 11, fontWeight: 600, color: "#C89B3C", letterSpacing: "0.04em",
                     }}>
-                      <span style={{ fontSize: 18 }}>{r.resultIcon}</span>
-                      <div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#F9F3E8" }}>{r.result}</div>
-                        <div style={{ fontSize: 11, color: "rgba(249,243,232,0.4)" }}>Used {r.weeksUsed} weeks · {r.hairType}</div>
-                      </div>
+                      {r.phase}
+                    </div>
+                    {/* Result badge overlay */}
+                    <div style={{
+                      position: "absolute", bottom: 12, left: 12,
+                      background: "rgba(92,42,10,0.85)", backdropFilter: "blur(8px)",
+                      borderRadius: 999, padding: "5px 12px",
+                      display: "flex", alignItems: "center", gap: 5,
+                      fontSize: 11, fontWeight: 600, color: "#E8B848",
+                    }}>
+                      <span>{r.resultIcon}</span>
+                      <span>{r.result}</span>
                     </div>
                   </div>
 
@@ -868,14 +825,14 @@ export default function Home() {
                     <div style={{ display: "flex", alignItems: "center", gap: 10, paddingTop: 4, borderTop: "1px solid rgba(249,243,232,0.06)" }}>
                       <div style={{
                         width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-                        background: "linear-gradient(135deg, #C89B3C, #E8B84B)",
+                        background: "linear-gradient(135deg, #C89B3C, #E8B848)",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#1E3A2F", fontWeight: 700, fontSize: 13,
+                        color: "#5C2A0A", fontWeight: 700, fontSize: 13,
                       }}>
                         {r.name[0]}
                       </div>
                       <div>
-                        <div style={{ fontWeight: 600, fontSize: 13, color: "#F9F3E8" }}>{r.name}</div>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: "#FBF6F0" }}>{r.name}</div>
                         <span style={{ fontSize: 10, color: "rgba(200,155,60,0.7)" }}>✓ Verified Purchase</span>
                       </div>
                     </div>
@@ -888,37 +845,37 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section style={{ padding: "96px 24px", background: "#F9F3E8", textAlign: "center" }}>
+      <section style={{ padding: "96px 24px", background: "#FBF6F0", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <div style={{ fontSize: 56, marginBottom: 24 }}>🌿</div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: "clamp(32px, 4vw, 48px)", marginBottom: 16, lineHeight: 1.2 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: "clamp(32px, 4vw, 48px)", marginBottom: 16, lineHeight: 1.2 }}>
             Ready for Healthy, <em style={{ color: "#C89B3C" }}>Beautiful Hair?</em>
           </h2>
-          <p style={{ color: "#3A6B52", fontSize: 15, marginBottom: 32 }}>
+          <p style={{ color: "#9B6535", fontSize: 15, marginBottom: 32 }}>
             Join thousands who have transformed their hair with Longtress. Free shipping on orders over $60.
           </p>
           <a href="#order" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "16px 40px", borderRadius: 999, fontWeight: 600, fontSize: 15,
-            background: "linear-gradient(135deg, #1E3A2F, #2D5240)", color: "#C89B3C",
-            textDecoration: "none", boxShadow: "0 8px 32px rgba(30,58,47,0.22)",
+            background: "linear-gradient(135deg, #5C2A0A, #7A3C14)", color: "#C89B3C",
+            textDecoration: "none", boxShadow: "0 8px 32px rgba(92,42,10,0.22)",
           }}>
             Get Longtress — $38
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-          <p style={{ color: "#3A6B52", fontSize: 12, marginTop: 16 }}>30-day satisfaction guarantee · Free returns</p>
+          <p style={{ color: "#9B6535", fontSize: 12, marginTop: 16 }}>30-day satisfaction guarantee · Free returns</p>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: "#1E3A2F" }}>
+      <footer style={{ background: "#5C2A0A" }}>
         {/* Newsletter strip */}
         <div style={{ borderBottom: "1px solid rgba(249,243,232,0.07)", padding: "48px 24px" }}>
           <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
             <div style={{ fontSize: 22, marginBottom: 8 }}>🌿</div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#F9F3E8", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>
+            <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#FBF6F0", fontSize: 24, fontWeight: 700, marginBottom: 8 }}>
               Get Hair Growth Tips & Exclusive Offers
             </h3>
             <p style={{ color: "rgba(249,243,232,0.45)", fontSize: 13, marginBottom: 24 }}>
@@ -930,13 +887,13 @@ export default function Home() {
                 placeholder="your@email.com"
                 style={{
                   flex: 1, padding: "13px 20px", background: "rgba(249,243,232,0.05)",
-                  border: "none", outline: "none", color: "#F9F3E8", fontSize: 13,
+                  border: "none", outline: "none", color: "#FBF6F0", fontSize: 13,
                   fontFamily: "'Inter', sans-serif",
                 }}
               />
               <button style={{
-                padding: "13px 24px", background: "linear-gradient(135deg, #C89B3C, #E8B84B)",
-                border: "none", color: "#1E3A2F", fontWeight: 700, fontSize: 13, cursor: "pointer",
+                padding: "13px 24px", background: "linear-gradient(135deg, #C89B3C, #E8B848)",
+                border: "none", color: "#5C2A0A", fontWeight: 700, fontSize: 13, cursor: "pointer",
                 whiteSpace: "nowrap", flexShrink: 0,
               }}>
                 Subscribe →
@@ -976,7 +933,7 @@ export default function Home() {
             {/* Links */}
             <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
               <div>
-                <div style={{ color: "#F9F3E8", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Shop</div>
+                <div style={{ color: "#FBF6F0", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Shop</div>
                 {["Hair Oil", "Gift Sets", "Bundle & Save", "Wholesale"].map((l) => (
                   <div key={l} style={{ marginBottom: 10 }}>
                     <a href="#" style={{ color: "rgba(249,243,232,0.4)", fontSize: 13, textDecoration: "none" }}>{l}</a>
@@ -984,7 +941,7 @@ export default function Home() {
                 ))}
               </div>
               <div>
-                <div style={{ color: "#F9F3E8", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Company</div>
+                <div style={{ color: "#FBF6F0", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Company</div>
                 {["About Us", "Our Story", "Sustainability", "Press"].map((l) => (
                   <div key={l} style={{ marginBottom: 10 }}>
                     <a href="#" style={{ color: "rgba(249,243,232,0.4)", fontSize: 13, textDecoration: "none" }}>{l}</a>
@@ -992,7 +949,7 @@ export default function Home() {
                 ))}
               </div>
               <div>
-                <div style={{ color: "#F9F3E8", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Support</div>
+                <div style={{ color: "#FBF6F0", fontSize: 13, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Support</div>
                 {["Shipping", "Returns", "FAQ", "Contact"].map((l) => (
                   <div key={l} style={{ marginBottom: 10 }}>
                     <a href={l === "FAQ" ? "#faq" : "#"} style={{ color: "rgba(249,243,232,0.4)", fontSize: 13, textDecoration: "none" }}>{l}</a>

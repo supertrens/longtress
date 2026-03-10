@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F9F3E8;
-  --foreground: #1E3A2F;
+  --background: #FBF6F0;
+  --foreground: #5C2A0A;
 }
 
 html {
@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F9F3E8;
+  background: #FBF6F0;
 }
 ::-webkit-scrollbar-thumb {
   background: #C89B3C;

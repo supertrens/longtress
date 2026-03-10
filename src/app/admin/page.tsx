@@ -16,7 +16,7 @@ const MOCK_ORDERS = [
 ];
 
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  Delivered: { bg: "rgba(30,58,47,0.1)", color: "#2D5240" },
+  Delivered: { bg: "rgba(92,42,10,0.1)", color: "#7A3C14" },
   Shipped: { bg: "rgba(200,155,60,0.12)", color: "#A07828" },
   Processing: { bg: "rgba(59,130,246,0.1)", color: "#2563EB" },
   Cancelled: { bg: "rgba(239,68,68,0.1)", color: "#DC2626" },
@@ -26,22 +26,22 @@ function StatCard({ icon, label, value, change, up }: { icon: string; label: str
   return (
     <div style={{
       padding: 24, borderRadius: 20, background: "#fff",
-      border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)",
+      border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
         <span style={{ fontSize: 28 }}>{icon}</span>
         <span style={{
           fontSize: 12, fontWeight: 600, padding: "3px 8px", borderRadius: 999,
-          background: up ? "rgba(30,58,47,0.08)" : "rgba(239,68,68,0.08)",
-          color: up ? "#2D5240" : "#DC2626",
+          background: up ? "rgba(92,42,10,0.08)" : "rgba(239,68,68,0.08)",
+          color: up ? "#7A3C14" : "#DC2626",
         }}>
           {up ? "↑" : "↓"} {change}
         </span>
       </div>
-      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#1E3A2F", marginBottom: 4 }}>
+      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#5C2A0A", marginBottom: 4 }}>
         {value}
       </div>
-      <div style={{ fontSize: 13, color: "#3A6B52" }}>{label}</div>
+      <div style={{ fontSize: 13, color: "#9B6535" }}>{label}</div>
     </div>
   );
 }
@@ -69,7 +69,7 @@ export default function AdminPage() {
 
       {/* Sidebar */}
       <aside style={{
-        width: 240, flexShrink: 0, background: "#1E3A2F",
+        width: 240, flexShrink: 0, background: "#5C2A0A",
         padding: "0 0 24px", display: "flex", flexDirection: "column",
         minHeight: "100vh", position: "sticky", top: 0,
       }}>
@@ -124,13 +124,13 @@ export default function AdminPage() {
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
           <div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 28, fontWeight: 700, marginBottom: 4 }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 28, fontWeight: 700, marginBottom: 4 }}>
               {tab === "overview" && "Dashboard Overview"}
               {tab === "orders" && "Orders"}
               {tab === "product" && "Product Management"}
               {tab === "customers" && "Customers"}
             </h1>
-            <p style={{ color: "#3A6B52", fontSize: 13 }}>
+            <p style={{ color: "#9B6535", fontSize: 13 }}>
               {tab === "overview" && "Your store performance at a glance"}
               {tab === "orders" && "Manage and track customer orders"}
               {tab === "product" && "Manage your Longtress Hair Oil listing"}
@@ -138,12 +138,12 @@ export default function AdminPage() {
             </p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ fontSize: 12, color: "#3A6B52" }}>Mar 8, 2025</div>
+            <div style={{ fontSize: 12, color: "#9B6535" }}>Mar 8, 2025</div>
             <div style={{
               width: 36, height: 36, borderRadius: "50%",
-              background: "linear-gradient(135deg, #C89B3C, #E8B84B)",
+              background: "linear-gradient(135deg, #C89B3C, #E8B848)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              color: "#1E3A2F", fontWeight: 700, fontSize: 14,
+              color: "#5C2A0A", fontWeight: 700, fontSize: 14,
             }}>A</div>
           </div>
         </div>
@@ -161,10 +161,10 @@ export default function AdminPage() {
 
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
               {/* Revenue chart */}
-              <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)" }}>
+              <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 18, fontWeight: 700 }}>Revenue</h3>
-                  <select style={{ fontSize: 12, color: "#3A6B52", border: "1px solid rgba(200,155,60,0.2)", borderRadius: 8, padding: "4px 8px", background: "#fff" }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 18, fontWeight: 700 }}>Revenue</h3>
+                  <select style={{ fontSize: 12, color: "#9B6535", border: "1px solid rgba(200,155,60,0.2)", borderRadius: 8, padding: "4px 8px", background: "#fff" }}>
                     <option>Last 7 days</option>
                     <option>Last 30 days</option>
                     <option>Last 90 days</option>
@@ -191,11 +191,11 @@ export default function AdminPage() {
                             <div style={{
                               width: "100%", borderRadius: "6px 6px 0 0",
                               height: `${(d.val / max) * 100}%`,
-                              background: d.day === "Sat" ? "linear-gradient(135deg, #C89B3C, #E8B84B)" : "rgba(200,155,60,0.2)",
+                              background: d.day === "Sat" ? "linear-gradient(135deg, #C89B3C, #E8B848)" : "rgba(200,155,60,0.2)",
                               minHeight: 8,
                             }} />
                           </div>
-                          <span style={{ fontSize: 11, color: "#3A6B52" }}>{d.day}</span>
+                          <span style={{ fontSize: 11, color: "#9B6535" }}>{d.day}</span>
                         </div>
                       ))}
                     </div>
@@ -204,17 +204,17 @@ export default function AdminPage() {
               </div>
 
               {/* Recent orders mini */}
-              <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)" }}>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 18, fontWeight: 700, marginBottom: 20 }}>Recent Orders</h3>
+              <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)" }}>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 18, fontWeight: 700, marginBottom: 20 }}>Recent Orders</h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   {MOCK_ORDERS.slice(0, 5).map((o) => (
                     <div key={o.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
-                        <div style={{ fontWeight: 600, fontSize: 13, color: "#1E3A2F" }}>{o.id}</div>
-                        <div style={{ fontSize: 11, color: "#3A6B52" }}>{o.customer}</div>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: "#5C2A0A" }}>{o.id}</div>
+                        <div style={{ fontSize: 11, color: "#9B6535" }}>{o.customer}</div>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <div style={{ fontWeight: 700, fontSize: 13, color: "#1E3A2F" }}>${o.total}</div>
+                        <div style={{ fontWeight: 700, fontSize: 13, color: "#5C2A0A" }}>${o.total}</div>
                         <span style={{
                           fontSize: 10, padding: "2px 8px", borderRadius: 999,
                           background: STATUS_STYLES[o.status]?.bg,
@@ -245,7 +245,7 @@ export default function AdminPage() {
             {/* Search + filter */}
             <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
               <div style={{ flex: 1, position: "relative" }}>
-                <svg width="16" height="16" fill="none" stroke="#3A6B52" viewBox="0 0 24 24" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}>
+                <svg width="16" height="16" fill="none" stroke="#9B6535" viewBox="0 0 24 24" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
@@ -254,13 +254,13 @@ export default function AdminPage() {
                   placeholder="Search orders, customers..."
                   style={{
                     width: "100%", padding: "11px 14px 11px 40px", borderRadius: 12, fontSize: 14,
-                    border: "1px solid rgba(200,155,60,0.2)", background: "#fff", color: "#1E3A2F", outline: "none",
+                    border: "1px solid rgba(200,155,60,0.2)", background: "#fff", color: "#5C2A0A", outline: "none",
                   }}
                 />
               </div>
               <select style={{
                 padding: "11px 16px", borderRadius: 12, fontSize: 14,
-                border: "1px solid rgba(200,155,60,0.2)", background: "#fff", color: "#1E3A2F",
+                border: "1px solid rgba(200,155,60,0.2)", background: "#fff", color: "#5C2A0A",
               }}>
                 <option>All Statuses</option>
                 <option>Delivered</option>
@@ -270,19 +270,19 @@ export default function AdminPage() {
               </select>
               <button style={{
                 padding: "11px 20px", borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: "pointer",
-                background: "linear-gradient(135deg, #C89B3C, #E8B84B)", color: "#1E3A2F", border: "none",
+                background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A", border: "none",
               }}>
                 Export CSV
               </button>
             </div>
 
             {/* Table */}
-            <div style={{ borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)", overflow: "hidden" }}>
+            <div style={{ borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)", overflow: "hidden" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr style={{ background: "rgba(30,58,47,0.03)", borderBottom: "1px solid rgba(200,155,60,0.12)" }}>
+                  <tr style={{ background: "rgba(92,42,10,0.03)", borderBottom: "1px solid rgba(200,155,60,0.12)" }}>
                     {["Order ID", "Customer", "Date", "Status", "Total", "Actions"].map((h) => (
-                      <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#3A6B52", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                      <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#9B6535", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                         {h}
                       </th>
                     ))}
@@ -291,12 +291,12 @@ export default function AdminPage() {
                 <tbody>
                   {filtered.map((o, i) => (
                     <tr key={o.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid rgba(200,155,60,0.08)" : "none" }}>
-                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 600, color: "#1E3A2F" }}>{o.id}</td>
+                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 600, color: "#5C2A0A" }}>{o.id}</td>
                       <td style={{ padding: "16px 20px" }}>
-                        <div style={{ fontSize: 14, fontWeight: 500, color: "#1E3A2F" }}>{o.customer}</div>
-                        <div style={{ fontSize: 12, color: "#3A6B52" }}>{o.email}</div>
+                        <div style={{ fontSize: 14, fontWeight: 500, color: "#5C2A0A" }}>{o.customer}</div>
+                        <div style={{ fontSize: 12, color: "#9B6535" }}>{o.email}</div>
                       </td>
-                      <td style={{ padding: "16px 20px", fontSize: 13, color: "#3A6B52" }}>{o.date}</td>
+                      <td style={{ padding: "16px 20px", fontSize: 13, color: "#9B6535" }}>{o.date}</td>
                       <td style={{ padding: "16px 20px" }}>
                         <span style={{
                           fontSize: 12, padding: "4px 12px", borderRadius: 999, fontWeight: 600,
@@ -306,7 +306,7 @@ export default function AdminPage() {
                           {o.status}
                         </span>
                       </td>
-                      <td style={{ padding: "16px 20px", fontSize: 15, fontWeight: 700, color: "#1E3A2F" }}>
+                      <td style={{ padding: "16px 20px", fontSize: 15, fontWeight: 700, color: "#5C2A0A" }}>
                         ${o.total.toFixed(2)}
                       </td>
                       <td style={{ padding: "16px 20px" }}>
@@ -323,7 +323,7 @@ export default function AdminPage() {
               </table>
 
               {filtered.length === 0 && (
-                <div style={{ padding: 48, textAlign: "center", color: "#3A6B52", fontSize: 14 }}>
+                <div style={{ padding: 48, textAlign: "center", color: "#9B6535", fontSize: 14 }}>
                   No orders found matching your search.
                 </div>
               )}
@@ -335,19 +335,19 @@ export default function AdminPage() {
         {tab === "product" && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
             {/* Product card */}
-            <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)" }}>
+            <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)" }}>
               <div style={{ display: "flex", gap: 20, marginBottom: 24 }}>
                 <div style={{
                   width: 80, height: 100, borderRadius: 14, flexShrink: 0,
-                  background: "linear-gradient(135deg, #1E3A2F, #2D5240)",
+                  background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
                   display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30,
                 }}>🌿</div>
                 <div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 20, fontWeight: 700, marginBottom: 4 }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 20, fontWeight: 700, marginBottom: 4 }}>
                     Longtress Haitian Hair Oil
                   </h3>
-                  <div style={{ fontSize: 13, color: "#3A6B52", marginBottom: 8 }}>SKU: LT-OIL-001 · 120 mL</div>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: "rgba(30,58,47,0.08)", fontSize: 12, fontWeight: 600, color: "#2D5240" }}>
+                  <div style={{ fontSize: 13, color: "#9B6535", marginBottom: 8 }}>SKU: LT-OIL-001 · 120 mL</div>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: "rgba(92,42,10,0.08)", fontSize: 12, fontWeight: 600, color: "#7A3C14" }}>
                     ● In Stock
                   </div>
                 </div>
@@ -361,16 +361,16 @@ export default function AdminPage() {
                   { label: "Rating", value: "⭐ 4.9 (2,400 reviews)" },
                 ].map((row) => (
                   <div key={row.label} style={{ display: "flex", justifyContent: "space-between", paddingBottom: 12, borderBottom: "1px solid rgba(200,155,60,0.08)" }}>
-                    <span style={{ fontSize: 13, color: "#3A6B52" }}>{row.label}</span>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: "#1E3A2F" }}>{row.value}</span>
+                    <span style={{ fontSize: 13, color: "#9B6535" }}>{row.label}</span>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: "#5C2A0A" }}>{row.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Edit form */}
-            <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)" }}>
-              <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#1E3A2F", fontSize: 20, fontWeight: 700, marginBottom: 24 }}>Edit Product</h3>
+            <div style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)" }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 20, fontWeight: 700, marginBottom: 24 }}>Edit Product</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {[
                   { label: "Product Name", value: "Longtress Haitian Hair Oil" },
@@ -378,31 +378,31 @@ export default function AdminPage() {
                   { label: "Stock Quantity", value: "847" },
                 ].map((f) => (
                   <div key={f.label}>
-                    <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#3A6B52", marginBottom: 6 }}>{f.label}</label>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#9B6535", marginBottom: 6 }}>{f.label}</label>
                     <input
                       defaultValue={f.value}
                       style={{
                         width: "100%", padding: "11px 14px", borderRadius: 10, fontSize: 14,
-                        border: "1px solid rgba(200,155,60,0.2)", background: "#F9F3E8", color: "#1E3A2F", outline: "none",
+                        border: "1px solid rgba(200,155,60,0.2)", background: "#FBF6F0", color: "#5C2A0A", outline: "none",
                       }}
                     />
                   </div>
                 ))}
                 <div>
-                  <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#3A6B52", marginBottom: 6 }}>Description</label>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#9B6535", marginBottom: 6 }}>Description</label>
                   <textarea
                     rows={4}
                     defaultValue="Premium Haitian black castor oil, cold-pressed and traditionally crafted..."
                     style={{
                       width: "100%", padding: "11px 14px", borderRadius: 10, fontSize: 14,
-                      border: "1px solid rgba(200,155,60,0.2)", background: "#F9F3E8", color: "#1E3A2F", outline: "none", resize: "vertical",
+                      border: "1px solid rgba(200,155,60,0.2)", background: "#FBF6F0", color: "#5C2A0A", outline: "none", resize: "vertical",
                       fontFamily: "'Inter', system-ui, sans-serif",
                     }}
                   />
                 </div>
                 <button style={{
                   padding: "13px", borderRadius: 12, fontWeight: 600, fontSize: 14, cursor: "pointer",
-                  background: "linear-gradient(135deg, #C89B3C, #E8B84B)", color: "#1E3A2F", border: "none",
+                  background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A", border: "none",
                 }}>
                   Save Changes
                 </button>
@@ -418,7 +418,7 @@ export default function AdminPage() {
               <span style={{ fontSize: 24 }}>⚠️</span>
               <div>
                 <div style={{ fontWeight: 600, color: "#A07828", fontSize: 14, marginBottom: 2 }}>Low Stock Alert Threshold</div>
-                <div style={{ fontSize: 13, color: "#3A6B52" }}>
+                <div style={{ fontSize: 13, color: "#9B6535" }}>
                   You have set an alert when stock falls below 100 units. Current stock: 847 units — you are good!
                 </div>
               </div>
@@ -435,22 +435,22 @@ export default function AdminPage() {
                 { icon: "🔁", label: "Repeat Buyers", value: "62%", note: "Order 2+ times" },
                 { icon: "⭐", label: "Avg. Rating", value: "4.9", note: "From verified buyers" },
               ].map((s) => (
-                <div key={s.label} style={{ padding: 24, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)" }}>
+                <div key={s.label} style={{ padding: 24, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)" }}>
                   <div style={{ fontSize: 28, marginBottom: 12 }}>{s.icon}</div>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#1E3A2F", marginBottom: 4 }}>{s.value}</div>
-                  <div style={{ fontSize: 13, color: "#3A6B52", fontWeight: 500 }}>{s.label}</div>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: "#5C2A0A", marginBottom: 4 }}>{s.value}</div>
+                  <div style={{ fontSize: 13, color: "#9B6535", fontWeight: 500 }}>{s.label}</div>
                   <div style={{ fontSize: 12, color: "#C89B3C", marginTop: 4 }}>{s.note}</div>
                 </div>
               ))}
             </div>
 
             {/* Customer list */}
-            <div style={{ borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(30,58,47,0.05)", overflow: "hidden" }}>
+            <div style={{ borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.1)", boxShadow: "0 2px 12px rgba(92,42,10,0.05)", overflow: "hidden" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr style={{ background: "rgba(30,58,47,0.03)", borderBottom: "1px solid rgba(200,155,60,0.12)" }}>
+                  <tr style={{ background: "rgba(92,42,10,0.03)", borderBottom: "1px solid rgba(200,155,60,0.12)" }}>
                     {["Customer", "Orders", "Spent", "Last Order", "Status"].map((h) => (
-                      <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#3A6B52", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                      <th key={h} style={{ padding: "14px 20px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#9B6535", letterSpacing: "0.05em", textTransform: "uppercase" }}>
                         {h}
                       </th>
                     ))}
@@ -463,25 +463,25 @@ export default function AdminPage() {
                         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                           <div style={{
                             width: 36, height: 36, borderRadius: "50%",
-                            background: "linear-gradient(135deg, #1E3A2F, #2D5240)",
+                            background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
                             display: "flex", alignItems: "center", justifyContent: "center",
                             color: "#C89B3C", fontWeight: 700, fontSize: 13, flexShrink: 0,
                           }}>
                             {o.customer[0]}
                           </div>
                           <div>
-                            <div style={{ fontSize: 14, fontWeight: 500, color: "#1E3A2F" }}>{o.customer}</div>
-                            <div style={{ fontSize: 12, color: "#3A6B52" }}>{o.email}</div>
+                            <div style={{ fontSize: 14, fontWeight: 500, color: "#5C2A0A" }}>{o.customer}</div>
+                            <div style={{ fontSize: 12, color: "#9B6535" }}>{o.email}</div>
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 600, color: "#1E3A2F" }}>
+                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 600, color: "#5C2A0A" }}>
                         {Math.ceil(o.total / 38)}
                       </td>
-                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 700, color: "#1E3A2F" }}>
+                      <td style={{ padding: "16px 20px", fontSize: 14, fontWeight: 700, color: "#5C2A0A" }}>
                         ${o.total}
                       </td>
-                      <td style={{ padding: "16px 20px", fontSize: 13, color: "#3A6B52" }}>{o.date}</td>
+                      <td style={{ padding: "16px 20px", fontSize: 13, color: "#9B6535" }}>{o.date}</td>
                       <td style={{ padding: "16px 20px" }}>
                         <span style={{
                           fontSize: 12, padding: "4px 12px", borderRadius: 999, fontWeight: 600,
