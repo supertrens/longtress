@@ -281,7 +281,7 @@ export default function Home() {
       }}>
         {/* Announcement bar */}
         {!scrolled && (
-          <div style={{
+          <div className="announcement-bar" style={{
             background: "linear-gradient(90deg, #C89B3C, #E8B848)",
             color: "#5C2A0A", textAlign: "center", fontSize: 12, fontWeight: 600,
             padding: "8px 24px", letterSpacing: "0.03em",
@@ -972,7 +972,8 @@ export default function Home() {
 
         @media (max-width: 768px) {
           .hidden-mobile { display: none !important; }
-          .hero-grid { grid-template-columns: 1fr !important; padding-top: 80px !important; }
+          .announcement-bar { display: none !important; }
+          .hero-grid { grid-template-columns: 1fr !important; padding-top: 96px !important; }
           .hero-bottle { display: none !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .benefits-grid { grid-template-columns: 1fr !important; }

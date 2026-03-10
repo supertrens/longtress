@@ -14,6 +14,7 @@ body {
   color: var(--foreground);
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -27,6 +28,13 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 640px) {
   .cart-item-card { padding: 16px !important; gap: 14px !important; }
   .cart-item-header { flex-direction: column !important; gap: 4px !important; align-items: flex-start !important; }
+}
+
+/* Hero mobile */
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr !important; padding-top: 100px !important; }
+  .hero-bottle { display: none !important; }
+  .announcement-bar { display: none !important; }
 }
 
 /* Scrollbar */
