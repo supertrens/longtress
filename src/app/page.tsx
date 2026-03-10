@@ -422,7 +422,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* HERO */}
-      <section style={{
+      <section className="hero-section" style={{
         minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden",
         background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 55%, #180C04 100%)",
       }}>
@@ -438,11 +438,12 @@ export default function Home() {
 
         <div className="hero-grid" style={{ position: "relative", maxWidth: 1152, margin: "0 auto", padding: "96px 24px 64px", display: "grid", gap: 48, alignItems: "center" }}>
           {/* Text column */}
-          <div>
+          <div className="hero-text">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
+              className="hero-tag"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: 500, marginBottom: 24,
@@ -471,6 +472,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
+              className="hero-desc"
               style={{ color: "rgba(249,243,232,0.72)", fontSize: 18, lineHeight: 1.7, marginBottom: 32, fontWeight: 300, maxWidth: 480 }}>
               Premium Haitian black castor oil, cold-pressed and traditionally crafted.
               Strengthen, grow, and restore your hair — the way our grandmothers always knew how.
@@ -480,6 +482,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.45 }}
+              className="hero-rating"
               style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
               <StarRating count={5} />
               <span style={{ color: "rgba(249,243,232,0.55)", fontSize: 13 }}>4.9 · Over 2,400 reviews</span>
@@ -489,6 +492,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.55 }}
+              className="hero-ctas"
               style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <motion.a
                 href="#order"
@@ -521,6 +525,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.7 }}
+              className="hero-badges"
               style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 28 }}>
               {["🌿 100% Natural", "✓ Cruelty-Free", "🚫 No Sulfates", "♻️ Eco Packaging"].map((b, i) => (
                 <motion.span
@@ -1067,9 +1072,20 @@ export default function Home() {
           .hidden-mobile { display: none !important; }
           .announcement-bar { display: none !important; }
           .mobile-menu-btn { display: flex !important; align-items: center; }
-          .hero-grid { grid-template-columns: 1fr !important; padding-top: 80px !important; gap: 24px !important; }
-          .hero-bottle { order: -1; justify-content: center !important; }
-          .hero-blob { width: 260px !important; height: 320px !important; }
+          /* Hero mobile improvements */
+          .hero-section { min-height: auto !important; padding: 0 0 48px !important; align-items: flex-start !important; }
+          .hero-grid { grid-template-columns: 1fr !important; padding: 72px 20px 40px !important; gap: 28px !important; align-items: stretch !important; }
+          .hero-text { text-align: center; }
+          .hero-text .hero-tag { margin-bottom: 16px !important; }
+          .hero-text h1 { font-size: clamp(28px, 8.5vw, 42px) !important; line-height: 1.15 !important; margin-bottom: 16px !important; }
+          .hero-text .hero-desc { font-size: 16px !important; margin-bottom: 20px !important; max-width: 100% !important; }
+          .hero-text .hero-rating { margin-bottom: 24px !important; justify-content: center !important; }
+          .hero-ctas { flex-direction: column !important; width: 100% !important; gap: 12px !important; }
+          .hero-ctas a { width: 100% !important; justify-content: center !important; min-height: 48px !important; padding: 14px 24px !important; }
+          .hero-badges { justify-content: center !important; gap: 8px !important; margin-top: 20px !important; }
+          .hero-badges span { font-size: 11px !important; padding: 5px 10px !important; }
+          .hero-bottle { order: -1; justify-content: center !important; padding-bottom: 8px !important; }
+          .hero-blob { width: min(280px, 75vw) !important; height: min(360px, 95vw) !important; margin: 0 auto !important; }
           .hero-float-card { display: none !important; }
           .hero-float-badge { display: none !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
