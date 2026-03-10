@@ -330,9 +330,81 @@ export default function Home() {
                 </span>
               )}
             </Link>
+
+            {/* Hamburger — mobile only */}
+            <button
+              className="mobile-menu-btn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{ background: "none", border: "none", cursor: "pointer", color: scrolled ? "#C89B3C" : "#FBF6F0", padding: 4, lineHeight: 0 }}
+              aria-label="Toggle menu"
+            >
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen
+                  ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                }
+              </svg>
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Mobile nav slide-in */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 98 }}
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                position: "fixed", top: 0, right: 0, bottom: 0, width: "72%", maxWidth: 280,
+                background: "rgba(92,42,10,0.98)", backdropFilter: "blur(20px)",
+                zIndex: 99, padding: "88px 28px 32px",
+                display: "flex", flexDirection: "column", gap: 0,
+                boxShadow: "-8px 0 40px rgba(0,0,0,0.35)",
+              }}
+            >
+              {NAV_LINKS.map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    color: "#FBF6F0", fontSize: 18, fontFamily: "'Playfair Display', serif",
+                    fontWeight: 600, textDecoration: "none",
+                    padding: "15px 0", borderBottom: "1px solid rgba(200,155,60,0.12)",
+                  }}
+                >
+                  {l.label}
+                </a>
+              ))}
+              <a
+                href="#order"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  marginTop: 24, display: "flex", alignItems: "center", justifyContent: "center",
+                  padding: "13px 24px", borderRadius: 999, fontWeight: 600, fontSize: 14,
+                  background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A",
+                  textDecoration: "none",
+                }}
+              >
+                Shop Now — $38
+              </a>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* HERO */}
       <section style={{
@@ -349,7 +421,7 @@ export default function Home() {
         <div style={{ position: "absolute", top: 80, right: 40, width: 280, height: 280, borderRadius: "50%", background: "#C89B3C", opacity: 0.08, filter: "blur(60px)" }} />
         <div style={{ position: "absolute", bottom: 80, left: 40, width: 200, height: 200, borderRadius: "50%", background: "#E8B848", opacity: 0.08, filter: "blur(60px)" }} />
 
-        <div className="hero-grid" style={{ position: "relative", maxWidth: 1152, margin: "0 auto", padding: "96px 24px 64px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
+        <div className="hero-grid" style={{ position: "relative", maxWidth: 1152, margin: "0 auto", padding: "96px 24px 64px", display: "grid", gap: 48, alignItems: "center" }}>
           {/* Text column */}
           <div>
             <motion.div
@@ -454,7 +526,7 @@ export default function Home() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            style={{ justifyContent: "center", alignItems: "center" }}>
             <div style={{ position: "relative", width: 400, height: 500 }}>
               {/* Blob frame — product photo fills the organic shape */}
               <div style={{
@@ -970,9 +1042,14 @@ export default function Home() {
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        .hero-grid { grid-template-columns: 1fr 1fr; }
+        .hero-bottle { display: flex; }
+        .mobile-menu-btn { display: none; }
+
         @media (max-width: 768px) {
           .hidden-mobile { display: none !important; }
           .announcement-bar { display: none !important; }
+          .mobile-menu-btn { display: flex !important; align-items: center; }
           .hero-grid { grid-template-columns: 1fr !important; padding-top: 96px !important; }
           .hero-bottle { display: none !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
