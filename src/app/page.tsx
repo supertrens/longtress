@@ -310,7 +310,7 @@ function BottleSVG({
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="faq" style={{ padding: "96px 24px", background: "#F5EBDC" }}>
+    <section id="faq" className="section-padding" style={{ background: "#F5EBDC" }}>
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <span
@@ -809,7 +809,6 @@ export default function Home() {
             position: "relative",
             maxWidth: 1152,
             margin: "0 auto",
-            padding: "96px 24px 64px",
             display: "grid",
             gap: 48,
             alignItems: "center",
@@ -1020,6 +1019,7 @@ export default function Home() {
                   inset: 0,
                   borderRadius: "46% 54% 58% 42% / 42% 46% 54% 58%",
                   overflow: "hidden",
+                  background: "#7A3C14",
                 }}
               >
                 {/* Real product photo as background */}
@@ -1027,6 +1027,8 @@ export default function Home() {
                   src="/product-1.jpeg"
                   alt="Longtress Haitian Hair Oil"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 75vw, 400px"
                   style={{ objectFit: "cover", objectPosition: "center" }}
                 />
                 {/* Subtle golden glow overlay */}
@@ -1205,7 +1207,8 @@ export default function Home() {
       {/* BENEFITS */}
       <section
         id="benefits"
-        style={{ padding: "96px 24px", background: "#FBF6F0" }}
+        className="section-padding"
+        style={{ background: "#FBF6F0" }}
       >
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -1297,10 +1300,8 @@ export default function Home() {
       {/* PRODUCT / ORDER */}
       <section
         id="order"
-        style={{
-          padding: "96px 24px",
-          background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 100%)",
-        }}
+        className="section-padding"
+        style={{ background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 100%)" }}
       >
         <div
           className="order-grid"
@@ -1573,6 +1574,7 @@ export default function Home() {
                     src="/product-2.jpeg"
                     alt="Longtress Haitian Hair Oil"
                     fill
+                    sizes="(max-width: 768px) 90vw, 280px"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                 </div>
@@ -1585,7 +1587,8 @@ export default function Home() {
       {/* INGREDIENTS */}
       <section
         id="ingredients"
-        style={{ padding: "96px 24px", background: "#F5EBDC" }}
+        className="section-padding"
+        style={{ background: "#F5EBDC" }}
       >
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -1685,7 +1688,8 @@ export default function Home() {
       {/* HOW TO USE */}
       <section
         id="how-to-use"
-        style={{ padding: "96px 24px", background: "#FBF6F0" }}
+        className="section-padding"
+        style={{ background: "#FBF6F0" }}
       >
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -1773,7 +1777,8 @@ export default function Home() {
       {/* REVIEWS */}
       <section
         id="reviews"
-        style={{ padding: "96px 24px", background: "#5C2A0A" }}
+        className="section-padding"
+        style={{ background: "#5C2A0A" }}
       >
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -1854,6 +1859,7 @@ export default function Home() {
                       src={r.image}
                       alt={`${r.name} review photo`}
                       fill
+                      sizes="(max-width: 768px) 100vw, 360px"
                       style={{ objectFit: "cover" }}
                     />
                     {/* Phase badge overlay */}
@@ -1996,8 +2002,8 @@ export default function Home() {
 
       {/* FINAL CTA */}
       <section
+        className="section-padding"
         style={{
-          padding: "96px 24px",
           background: "#FBF6F0",
           textAlign: "center",
         }}
@@ -2171,7 +2177,8 @@ export default function Home() {
                 }}
               >
                 Premium Haitian black castor oil, cold-pressed and traditionally
-                crafted for all hair types.
+                crafted for all hair types. Small-batch made in Haiti using
+                time-honored methods — for healthy, beautiful hair.
               </p>
               {/* Social icons */}
               <div style={{ display: "flex", gap: 12 }}>
@@ -2371,7 +2378,11 @@ export default function Home() {
         .cta-primary { transition: transform 0.2s ease, box-shadow 0.2s ease; display: inline-flex !important; }
         .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(92,42,10,0.28) !important; }
 
-        .hero-grid { grid-template-columns: 1fr 1fr; }
+        .section-padding { padding: var(--section-padding-y) 24px; }
+        .hero-grid {
+          grid-template-columns: 1fr 1fr;
+          padding: var(--section-padding-y) 24px 64px;
+        }
         .hero-bottle { display: flex; }
         .mobile-menu-btn { display: none; }
 

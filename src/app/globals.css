@@ -3,6 +3,7 @@
 :root {
   --background: #FBF6F0;
   --foreground: #5C2A0A;
+  --section-padding-y: clamp(72px, 10vw, 96px);
 }
 
 html {
