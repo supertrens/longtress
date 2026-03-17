@@ -1,6 +1,14 @@
 import { Resend } from "resend";
 
-export const resend = new Resend(process.env.RESEND_API_KEY!);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) throw new Error("RESEND_API_KEY is not set");
+    _resend = new Resend(key);
+  }
+  return _resend;
+}
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? "orders@longtress.com";
 
@@ -43,7 +51,7 @@ export async function sendOrderConfirmation(order: {
     .filter(Boolean)
     .join("<br/>");
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: order.customerEmail,
     subject: `Order Confirmed — ${order.id} | Longtress`,
@@ -151,7 +159,7 @@ export async function sendStatusUpdate(order: {
   const msg = statusMessages[order.status];
   if (!msg) return; // Don't send for statuses with no message defined
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: order.customerEmail,
     subject: `${msg.emoji} Order ${order.id} — ${order.status} | Longtress`,
