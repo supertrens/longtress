@@ -3,29 +3,58 @@
 import { useState } from "react";
 import Link from "next/link";
 
-type Step = "info" | "shipping" | "payment" | "confirm";
+type Step = "info" | "shipping" | "payment";
 
 const STEPS_LIST: { id: Step; label: string }[] = [
   { id: "info", label: "Information" },
   { id: "shipping", label: "Shipping" },
   { id: "payment", label: "Payment" },
-  { id: "confirm", label: "Confirm" },
 ];
 
-function Input({ label, placeholder, type = "text", half = false }: { label: string; placeholder?: string; type?: string; half?: boolean }) {
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  apt: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+};
+
+function Input({
+  label,
+  placeholder,
+  type = "text",
+  half = false,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder?: string;
+  type?: string;
+  half?: boolean;
+  value: string;
+  onChange: (val: string) => void;
+}) {
   return (
-    <div className={half ? "input-half" : ""} style={{ flex: half ? "1 1 calc(50% - 8px)" : "1 1 100%" }}>
-      <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#9B6535", marginBottom: 6, letterSpacing: "0.03em" }}>
+    <div style={{ flex: half ? "1 1 calc(50% - 8px)" : "1 1 100%" }}>
+      <label style={{ display: "block", fontSize: 12, fontWeight: 500, color: "#9B6B5A", marginBottom: 6, letterSpacing: "0.03em" }}>
         {label}
       </label>
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         style={{
           width: "100%", padding: "12px 16px", borderRadius: 12, fontSize: 14,
-          border: "1px solid rgba(200,155,60,0.2)", background: "#fff",
-          color: "#5C2A0A", outline: "none",
+          border: "1px solid rgba(201,125,96,0.2)", background: "#fff",
+          color: "#262322", outline: "none",
           fontFamily: "'Inter', system-ui, sans-serif",
+          boxSizing: "border-box",
         }}
       />
     </div>
@@ -33,7 +62,7 @@ function Input({ label, placeholder, type = "text", half = false }: { label: str
 }
 
 function StepDot({ step, current }: { step: Step; current: Step }) {
-  const order: Step[] = ["info", "shipping", "payment", "confirm"];
+  const order: Step[] = ["info", "shipping", "payment"];
   const stepIdx = order.indexOf(step);
   const currentIdx = order.indexOf(current);
   const done = stepIdx < currentIdx;
@@ -43,8 +72,8 @@ function StepDot({ step, current }: { step: Step; current: Step }) {
     <div style={{
       width: 32, height: 32, borderRadius: "50%",
       display: "flex", alignItems: "center", justifyContent: "center",
-      background: done ? "#C89B3C" : active ? "#5C2A0A" : "rgba(92,42,10,0.08)",
-      color: done ? "#5C2A0A" : active ? "#C89B3C" : "#9B6535",
+      background: done ? "#C97D60" : active ? "#262322" : "rgba(38,35,34,0.08)",
+      color: done ? "#262322" : active ? "#C97D60" : "#9B6B5A",
       fontSize: 13, fontWeight: 700, flexShrink: 0,
       transition: "all 0.3s ease",
     }}>
@@ -56,72 +85,81 @@ function StepDot({ step, current }: { step: Step; current: Step }) {
 export default function CheckoutPage() {
   const [step, setStep] = useState<Step>("info");
   const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
+  const [qty] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const subtotal = 38;
+  const [form, setForm] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    apt: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+  });
+
+  const set = (field: keyof FormData) => (val: string) =>
+    setForm((f) => ({ ...f, [field]: val }));
+
+  const subtotal = 38 * qty;
   const shippingCost = shippingMethod === "express" ? 14.99 : 0;
   const tax = (subtotal + shippingCost) * 0.08;
   const total = subtotal + shippingCost + tax;
 
   const nextStep = () => {
-    const order: Step[] = ["info", "shipping", "payment", "confirm"];
+    const order: Step[] = ["info", "shipping", "payment"];
     const idx = order.indexOf(step);
     if (idx < order.length - 1) setStep(order[idx + 1]);
   };
 
   const prevStep = () => {
-    const order: Step[] = ["info", "shipping", "payment", "confirm"];
+    const order: Step[] = ["info", "shipping", "payment"];
     const idx = order.indexOf(step);
     if (idx > 0) setStep(order[idx - 1]);
   };
 
-  if (step === "confirm") {
-    return (
-      <div style={{ minHeight: "100vh", background: "#FBF6F0", fontFamily: "'Inter', system-ui, sans-serif", display: "flex", flexDirection: "column" }}>
-        <header style={{ background: "#5C2A0A", padding: "0 24px" }}>
-          <div style={{ maxWidth: 1024, margin: "0 auto", height: 64, display: "flex", alignItems: "center" }}>
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <span style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#C89B3C", fontWeight: 700, fontSize: 22, letterSpacing: "0.1em" }}>LONGTRESS</span>
-            </Link>
-          </div>
-        </header>
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 48 }}>
-          <div style={{ textAlign: "center", maxWidth: 480 }}>
-            <div style={{
-              width: 80, height: 80, borderRadius: "50%", margin: "0 auto 28px",
-              background: "linear-gradient(135deg, #C89B3C, #E8B848)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 32, boxShadow: "0 8px 32px rgba(200,155,60,0.35)",
-            }}>✓</div>
-            <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#5C2A0A", fontSize: 36, fontWeight: 700, marginBottom: 16 }}>
-              Order Confirmed!
-            </h1>
-            <p style={{ color: "#9B6535", fontSize: 15, lineHeight: 1.8, marginBottom: 8 }}>
-              Thank you for your order. Your Longtress Haitian Hair Oil is on its way!
-            </p>
-            <p style={{ color: "#9B6535", fontSize: 14, marginBottom: 32 }}>
-              Order #LT-{Math.floor(Math.random() * 90000 + 10000)} · A confirmation email has been sent.
-            </p>
-            <Link href="/" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 32px", borderRadius: 999, fontWeight: 600, fontSize: 15,
-              background: "linear-gradient(135deg, #5C2A0A, #7A3C14)", color: "#C89B3C",
-              textDecoration: "none",
-            }}>
-              ← Back to Home
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handlePlaceOrder = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          apt: form.apt,
+          city: form.city,
+          state: form.state,
+          zip: form.zip,
+          country: form.country,
+          shippingMethod,
+          qty,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      window.location.href = data.url;
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FBF6F0", fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#F2E5D7", fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Header */}
-      <header style={{ background: "#5C2A0A", padding: "0 24px" }}>
+      <header style={{ background: "#262322", padding: "0 24px" }}>
         <div style={{ maxWidth: 1024, margin: "0 auto", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <span style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#C89B3C", fontWeight: 700, fontSize: 22, letterSpacing: "0.1em" }}>LONGTRESS</span>
+            <span style={{ fontFamily: "'Playfair Display', Georgia, serif", color: "#C97D60", fontWeight: 700, fontSize: 22, letterSpacing: "0.1em" }}>LONGTRESS</span>
           </Link>
           <div className="checkout-steps" style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {STEPS_LIST.map((s, i) => (
@@ -129,12 +167,12 @@ export default function CheckoutPage() {
                 <StepDot step={s.id} current={step} />
                 <span style={{
                   fontSize: 12, fontWeight: 500,
-                  color: s.id === step ? "#C89B3C" : "rgba(249,243,232,0.4)",
+                  color: s.id === step ? "#C97D60" : "rgba(242,229,215,0.4)",
                 }}>
                   {s.label}
                 </span>
                 {i < STEPS_LIST.length - 1 && (
-                  <div style={{ width: 24, height: 1, background: "rgba(200,155,60,0.2)", marginLeft: 4 }} />
+                  <div style={{ width: 24, height: 1, background: "rgba(201,125,96,0.2)", marginLeft: 4 }} />
                 )}
               </div>
             ))}
@@ -148,29 +186,29 @@ export default function CheckoutPage() {
           {/* STEP: INFO */}
           {step === "info" && (
             <div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#262322", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
                 Contact Information
               </h2>
-              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.12)", boxShadow: "0 2px 16px rgba(92,42,10,0.05)", marginBottom: 24 }}>
+              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(201,125,96,0.12)", boxShadow: "0 2px 16px rgba(38,35,34,0.05)", marginBottom: 24 }}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-                  <Input label="First Name" placeholder="Marie" half />
-                  <Input label="Last Name" placeholder="Joseph" half />
-                  <Input label="Email Address" placeholder="marie@example.com" type="email" />
-                  <Input label="Phone Number" placeholder="+1 (555) 000-0000" type="tel" />
+                  <Input label="First Name" placeholder="Marie" half value={form.firstName} onChange={set("firstName")} />
+                  <Input label="Last Name" placeholder="Joseph" half value={form.lastName} onChange={set("lastName")} />
+                  <Input label="Email Address" placeholder="marie@example.com" type="email" value={form.email} onChange={set("email")} />
+                  <Input label="Phone Number" placeholder="+1 (555) 000-0000" type="tel" value={form.phone} onChange={set("phone")} />
                 </div>
               </div>
 
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#262322", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
                 Shipping Address
               </h2>
-              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.12)", boxShadow: "0 2px 16px rgba(92,42,10,0.05)" }}>
+              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(201,125,96,0.12)", boxShadow: "0 2px 16px rgba(38,35,34,0.05)" }}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-                  <Input label="Address" placeholder="123 Main Street" />
-                  <Input label="Apartment, suite, etc. (optional)" placeholder="Apt 4B" />
-                  <Input label="City" placeholder="Miami" half />
-                  <Input label="State" placeholder="FL" half />
-                  <Input label="ZIP Code" placeholder="33101" half />
-                  <Input label="Country" placeholder="United States" half />
+                  <Input label="Address" placeholder="123 Main Street" value={form.address} onChange={set("address")} />
+                  <Input label="Apartment, suite, etc. (optional)" placeholder="Apt 4B" value={form.apt} onChange={set("apt")} />
+                  <Input label="City" placeholder="Miami" half value={form.city} onChange={set("city")} />
+                  <Input label="State" placeholder="FL" half value={form.state} onChange={set("state")} />
+                  <Input label="ZIP Code" placeholder="33101" half value={form.zip} onChange={set("zip")} />
+                  <Input label="Country" placeholder="United States" half value={form.country} onChange={set("country")} />
                 </div>
               </div>
             </div>
@@ -179,12 +217,12 @@ export default function CheckoutPage() {
           {/* STEP: SHIPPING */}
           {step === "shipping" && (
             <div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#262322", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
                 Shipping Method
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {[
-                  { id: "standard" as const, name: "Standard Shipping", time: "5-7 business days", price: "FREE", note: "Free on orders over $60" },
+                  { id: "standard" as const, name: "Standard Shipping", time: "5-7 business days", price: "FREE", note: "Free on all orders" },
                   { id: "express" as const, name: "Express Shipping", time: "2-3 business days", price: "$14.99", note: "Guaranteed delivery" },
                 ].map((opt) => (
                   <div
@@ -192,8 +230,8 @@ export default function CheckoutPage() {
                     onClick={() => setShippingMethod(opt.id)}
                     style={{
                       padding: 24, borderRadius: 20, cursor: "pointer",
-                      background: shippingMethod === opt.id ? "rgba(200,155,60,0.06)" : "#fff",
-                      border: `2px solid ${shippingMethod === opt.id ? "#C89B3C" : "rgba(200,155,60,0.15)"}`,
+                      background: shippingMethod === opt.id ? "rgba(201,125,96,0.06)" : "#fff",
+                      border: `2px solid ${shippingMethod === opt.id ? "#C97D60" : "rgba(201,125,96,0.15)"}`,
                       transition: "all 0.2s ease",
                     }}
                   >
@@ -201,20 +239,20 @@ export default function CheckoutPage() {
                       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
                         <div style={{
                           width: 20, height: 20, borderRadius: "50%",
-                          border: `2px solid ${shippingMethod === opt.id ? "#C89B3C" : "rgba(92,42,10,0.2)"}`,
+                          border: `2px solid ${shippingMethod === opt.id ? "#C97D60" : "rgba(38,35,34,0.2)"}`,
                           display: "flex", alignItems: "center", justifyContent: "center",
                           flexShrink: 0,
                         }}>
                           {shippingMethod === opt.id && (
-                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#C89B3C" }} />
+                            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#C97D60" }} />
                           )}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 600, fontSize: 15, color: "#5C2A0A", marginBottom: 2 }}>{opt.name}</div>
-                          <div style={{ fontSize: 13, color: "#9B6535" }}>{opt.time} · {opt.note}</div>
+                          <div style={{ fontWeight: 600, fontSize: 15, color: "#262322", marginBottom: 2 }}>{opt.name}</div>
+                          <div style={{ fontSize: 13, color: "#9B6B5A" }}>{opt.time} · {opt.note}</div>
                         </div>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: 16, color: opt.id === "standard" ? "#7A3C14" : "#5C2A0A" }}>
+                      <div style={{ fontWeight: 700, fontSize: 16, color: opt.id === "standard" ? "#63372C" : "#262322" }}>
                         {opt.price}
                       </div>
                     </div>
@@ -227,59 +265,62 @@ export default function CheckoutPage() {
           {/* STEP: PAYMENT */}
           {step === "payment" && (
             <div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", color: "#262322", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>
                 Payment
               </h2>
-              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(200,155,60,0.12)", boxShadow: "0 2px 16px rgba(92,42,10,0.05)" }}>
-                {/* Stripe-style card UI */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "10px 16px", borderRadius: 12, background: "rgba(92,42,10,0.04)", border: "1px solid rgba(92,42,10,0.08)" }}>
-                  <svg width="18" height="18" fill="none" stroke="#7A3C14" viewBox="0 0 24 24">
+              <div className="checkout-card" style={{ padding: 28, borderRadius: 20, background: "#fff", border: "1px solid rgba(201,125,96,0.12)", boxShadow: "0 2px 16px rgba(38,35,34,0.05)" }}>
+                {/* Security badge */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28, padding: "12px 16px", borderRadius: 12, background: "rgba(38,35,34,0.04)", border: "1px solid rgba(38,35,34,0.08)" }}>
+                  <svg width="18" height="18" fill="none" stroke="#63372C" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
-                  <span style={{ fontSize: 13, color: "#7A3C14", fontWeight: 500 }}>All transactions are secure and encrypted · Powered by Stripe</span>
+                  <span style={{ fontSize: 13, color: "#63372C", fontWeight: 500 }}>All transactions are secure and encrypted · Powered by Stripe</span>
                 </div>
 
-                {/* Card visual */}
-                <div style={{
-                  width: "100%", height: 160, borderRadius: 20, marginBottom: 28,
-                  background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
-                  padding: "24px 28px", display: "flex", flexDirection: "column", justifyContent: "space-between",
-                  boxShadow: "0 8px 32px rgba(92,42,10,0.25)", position: "relative", overflow: "hidden",
-                }}>
-                  <div style={{ position: "absolute", top: -20, right: -20, width: 120, height: 120, borderRadius: "50%", background: "rgba(200,155,60,0.1)" }} />
-                  <div style={{ position: "absolute", top: 40, right: 20, width: 70, height: 70, borderRadius: "50%", background: "rgba(200,155,60,0.07)" }} />
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontFamily: "'Playfair Display', serif", color: "#C89B3C", fontWeight: 700, fontSize: 16, letterSpacing: "0.1em" }}>LONGTRESS</span>
-                    <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                      <rect width="40" height="24" rx="4" fill="rgba(255,255,255,0.05)" />
-                      <circle cx="16" cy="12" r="8" fill="#C89B3C" opacity="0.8" />
-                      <circle cx="24" cy="12" r="8" fill="#E8B848" opacity="0.6" />
+                {/* Stripe redirect info */}
+                <div style={{ textAlign: "center", padding: "32px 24px" }}>
+                  <div style={{
+                    width: 72, height: 72, borderRadius: "50%", margin: "0 auto 20px",
+                    background: "linear-gradient(135deg, #262322, #63372C)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <svg width="32" height="32" fill="none" stroke="#C97D60" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
                   </div>
-                  <div>
-                    <div style={{ color: "rgba(249,243,232,0.4)", fontSize: 11, marginBottom: 4, letterSpacing: "0.1em" }}>CARD NUMBER</div>
-                    <div style={{ color: "rgba(249,243,232,0.7)", fontSize: 15, letterSpacing: "0.2em", fontFamily: "monospace" }}>•••• •••• •••• ••••</div>
-                  </div>
-                  <div style={{ display: "flex", gap: 40 }}>
-                    <div>
-                      <div style={{ color: "rgba(249,243,232,0.4)", fontSize: 10, letterSpacing: "0.1em" }}>CARDHOLDER</div>
-                      <div style={{ color: "rgba(249,243,232,0.75)", fontSize: 13 }}>Your Name</div>
-                    </div>
-                    <div>
-                      <div style={{ color: "rgba(249,243,232,0.4)", fontSize: 10, letterSpacing: "0.1em" }}>EXPIRES</div>
-                      <div style={{ color: "rgba(249,243,232,0.75)", fontSize: 13 }}>MM / YY</div>
-                    </div>
+                  <p style={{ color: "#262322", fontSize: 16, fontWeight: 600, marginBottom: 8 }}>
+                    Pay Securely with Stripe
+                  </p>
+                  <p style={{ color: "#9B6B5A", fontSize: 14, lineHeight: 1.7, marginBottom: 28 }}>
+                    You'll be redirected to Stripe's secure checkout to enter your payment details. We never see or store your card information.
+                  </p>
+
+                  {/* Card brand logos */}
+                  <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                    {["Visa", "Mastercard", "Amex", "Apple Pay", "Google Pay"].map((brand) => (
+                      <div key={brand} style={{
+                        padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+                        border: "1px solid rgba(201,125,96,0.2)", color: "#9B6B5A", background: "rgba(242,229,215,0.5)",
+                      }}>
+                        {brand}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  <Input label="Cardholder Name" placeholder="Marie Joseph" />
-                  <Input label="Card Number" placeholder="1234 5678 9012 3456" />
-                  <div style={{ display: "flex", gap: 16 }}>
-                    <Input label="Expiry Date" placeholder="MM / YY" half />
-                    <Input label="Security Code (CVV)" placeholder="•••" half />
-                  </div>
+                {/* Total summary */}
+                <div style={{ borderTop: "1px solid rgba(201,125,96,0.15)", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ color: "#9B6B5A", fontSize: 14 }}>Total charged today</span>
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: "#262322", fontSize: 22 }}>
+                    ${total.toFixed(2)}
+                  </span>
                 </div>
+
+                {error && (
+                  <div style={{ marginTop: 16, padding: "12px 16px", borderRadius: 10, background: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.2)", color: "#dc2626", fontSize: 13 }}>
+                    {error}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -291,7 +332,7 @@ export default function CheckoutPage() {
                 onClick={prevStep}
                 style={{
                   padding: "12px 24px", borderRadius: 999, fontWeight: 500, fontSize: 14,
-                  background: "none", border: "1px solid rgba(92,42,10,0.2)", color: "#9B6535", cursor: "pointer",
+                  background: "none", border: "1px solid rgba(38,35,34,0.2)", color: "#9B6B5A", cursor: "pointer",
                 }}
               >
                 ← Back
@@ -299,23 +340,40 @@ export default function CheckoutPage() {
             ) : (
               <Link href="/cart" style={{
                 padding: "12px 24px", borderRadius: 999, fontWeight: 500, fontSize: 14,
-                border: "1px solid rgba(92,42,10,0.2)", color: "#9B6535",
+                border: "1px solid rgba(38,35,34,0.2)", color: "#9B6B5A",
                 textDecoration: "none", display: "inline-block",
               }}>
                 ← Back to Cart
               </Link>
             )}
 
-            <button
-              onClick={nextStep}
-              style={{
-                padding: "14px 36px", borderRadius: 999, fontWeight: 600, fontSize: 15, cursor: "pointer",
-                background: "linear-gradient(135deg, #C89B3C, #E8B848)", color: "#5C2A0A",
-                border: "none", boxShadow: "0 8px 24px rgba(200,155,60,0.35)",
-              }}
-            >
-              {step === "payment" ? `Place Order — $${total.toFixed(2)}` : "Continue →"}
-            </button>
+            {step !== "payment" ? (
+              <button
+                onClick={nextStep}
+                style={{
+                  padding: "14px 36px", borderRadius: 999, fontWeight: 600, fontSize: 15, cursor: "pointer",
+                  background: "linear-gradient(135deg, #C97D60, #FFBCB5)", color: "#262322",
+                  border: "none", boxShadow: "0 8px 24px rgba(201,125,96,0.35)",
+                }}
+              >
+                Continue →
+              </button>
+            ) : (
+              <button
+                onClick={handlePlaceOrder}
+                disabled={loading}
+                style={{
+                  padding: "14px 36px", borderRadius: 999, fontWeight: 600, fontSize: 15,
+                  cursor: loading ? "not-allowed" : "pointer",
+                  background: loading ? "rgba(201,125,96,0.5)" : "linear-gradient(135deg, #C97D60, #FFBCB5)",
+                  color: "#262322", border: "none",
+                  boxShadow: loading ? "none" : "0 8px 24px rgba(201,125,96,0.35)",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {loading ? "Redirecting to Stripe…" : `Pay $${total.toFixed(2)} →`}
+              </button>
+            )}
           </div>
         </div>
 
@@ -323,66 +381,49 @@ export default function CheckoutPage() {
         <div>
           <div style={{
             padding: 24, borderRadius: 20,
-            background: "#fff", border: "1px solid rgba(200,155,60,0.12)",
-            boxShadow: "0 2px 16px rgba(92,42,10,0.06)",
+            background: "#fff", border: "1px solid rgba(201,125,96,0.12)",
+            boxShadow: "0 2px 16px rgba(38,35,34,0.06)",
             position: "sticky", top: 80,
           }}>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#5C2A0A", fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
+            <h3 style={{ fontFamily: "'Playfair Display', serif", color: "#262322", fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
               Order Summary
             </h3>
 
             {/* Product */}
-            <div style={{ display: "flex", gap: 14, marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid rgba(200,155,60,0.1)" }}>
+            <div style={{ display: "flex", gap: 14, marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid rgba(201,125,96,0.1)" }}>
               <div style={{
                 width: 56, height: 70, borderRadius: 10, flexShrink: 0,
-                background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
+                background: "linear-gradient(135deg, #262322, #63372C)",
                 display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
               }}>🌿</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: 13, color: "#5C2A0A", marginBottom: 2 }}>Longtress Haitian Hair Oil</div>
-                <div style={{ fontSize: 12, color: "#9B6535" }}>120 mL · Qty 1</div>
+                <div style={{ fontWeight: 600, fontSize: 13, color: "#262322", marginBottom: 2 }}>Longtress Haitian Hair Oil</div>
+                <div style={{ fontSize: 12, color: "#9B6B5A" }}>120 mL · Qty {qty}</div>
               </div>
-              <div style={{ fontWeight: 700, fontSize: 16, color: "#5C2A0A" }}>$38.00</div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: "#262322" }}>${(38 * qty).toFixed(2)}</div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6535" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6B5A" }}>
                 <span>Subtotal</span><span>${subtotal.toFixed(2)}</span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6535" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6B5A" }}>
                 <span>Shipping</span>
-                <span style={{ color: shippingCost === 0 ? "#7A3C14" : "#9B6535", fontWeight: shippingCost === 0 ? 600 : 400 }}>
+                <span style={{ color: shippingCost === 0 ? "#63372C" : "#9B6B5A", fontWeight: shippingCost === 0 ? 600 : 400 }}>
                   {shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`}
                 </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6535" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: "#9B6B5A" }}>
                 <span>Tax (8%)</span><span>${tax.toFixed(2)}</span>
               </div>
             </div>
 
             <div style={{
-              borderTop: "1px solid rgba(200,155,60,0.15)", paddingTop: 14,
+              borderTop: "1px solid rgba(201,125,96,0.15)", paddingTop: 14,
               display: "flex", justifyContent: "space-between",
             }}>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: "#5C2A0A", fontSize: 16 }}>Total</span>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: "#5C2A0A", fontSize: 20 }}>${total.toFixed(2)}</span>
-            </div>
-
-            {/* Promo code */}
-            <div style={{ marginTop: 20, display: "flex", gap: 8 }}>
-              <input
-                placeholder="Promo code"
-                style={{
-                  flex: 1, padding: "10px 14px", borderRadius: 10, fontSize: 13,
-                  border: "1px solid rgba(200,155,60,0.2)", background: "rgba(249,243,232,0.5)", color: "#5C2A0A", outline: "none",
-                }}
-              />
-              <button style={{
-                padding: "10px 16px", borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: "pointer",
-                background: "#5C2A0A", color: "#C89B3C", border: "none",
-              }}>
-                Apply
-              </button>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: "#262322", fontSize: 16 }}>Total</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: "#262322", fontSize: 20 }}>${total.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -393,7 +434,6 @@ export default function CheckoutPage() {
           .checkout-steps { display: none !important; }
         }
         @media (max-width: 640px) {
-          .input-half { flex: 1 1 100% !important; }
           .checkout-grid { padding: 24px 16px !important; }
           .checkout-card { padding: 20px !important; }
         }

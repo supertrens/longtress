@@ -120,7 +120,7 @@ const REVIEWS = [
     weeksUsed: 12,
     result: "3 inches of new growth",
     resultIcon: "📏",
-    resultColor: "#7A3C14",
+    resultColor: "#63372C",
     resultBg: "rgba(62,28,11,0.12)",
     tags: ["Edge regrowth", "Less breakage"],
     text: "My hair has never been this thick and healthy. I've been using Longtress for 3 months and I can already see so much new growth. The oil is lightweight — no greasy residue at all.",
@@ -135,7 +135,7 @@ const REVIEWS = [
     result: "Scalp issues gone",
     resultIcon: "🌿",
     resultColor: "#8B5020",
-    resultBg: "rgba(200,155,60,0.12)",
+    resultBg: "rgba(201,125,96,0.12)",
     tags: ["Scalp health", "Shine boost"],
     text: "After 6 weeks my scalp is completely clear — no flaking, no irritation. My curls are more defined and the moisture retention is insane. I apply it every wash day.",
     phase: "After 6 weeks",
@@ -148,8 +148,8 @@ const REVIEWS = [
     weeksUsed: 4,
     result: "Edges visibly filled in",
     resultIcon: "✨",
-    resultColor: "#5C2A0A",
-    resultBg: "rgba(92,42,10,0.12)",
+    resultColor: "#262322",
+    resultBg: "rgba(38,35,34,0.12)",
     tags: ["Edges back", "Thicker density"],
     text: "After just 4 weeks my edges are filling back in from stress-related loss. I apply it at night before braiding. The results are real — my stylist noticed before I even told her.",
     phase: "After 4 weeks",
@@ -161,7 +161,7 @@ function StarRating({ count }: { count: number }) {
   return (
     <div style={{ display: "flex", gap: "2px" }}>
       {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} width="16" height="16" viewBox="0 0 20 20" fill="#C89B3C">
+        <svg key={i} width="16" height="16" viewBox="0 0 20 20" fill="#C97D60">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
       ))}
@@ -230,26 +230,26 @@ function BottleSVG({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect x="52" y="10" width="36" height="22" rx="6" fill="#C89B3C" />
-      <rect x="56" y="8" width="28" height="6" rx="3" fill="#A07828" />
-      <rect x="58" y="30" width="24" height="20" rx="4" fill="#7A3C14" />
-      <path d="M50 50 Q38 62 36 80 H104 Q102 62 90 50 Z" fill="#7A3C14" />
-      <rect x="30" y="78" width="80" height="112" rx="16" fill="#7A3C14" />
+      <rect x="52" y="10" width="36" height="22" rx="6" fill="#C97D60" />
+      <rect x="56" y="8" width="28" height="6" rx="3" fill="#A0614A" />
+      <rect x="58" y="30" width="24" height="20" rx="4" fill="#63372C" />
+      <path d="M50 50 Q38 62 36 80 H104 Q102 62 90 50 Z" fill="#63372C" />
+      <rect x="30" y="78" width="80" height="112" rx="16" fill="#63372C" />
       <rect
         x="38"
         y="95"
         width="64"
         height="80"
         rx="8"
-        fill="rgba(249,243,232,0.08)"
-        stroke="rgba(200,155,60,0.35)"
+        fill="rgba(242,229,215,0.08)"
+        stroke="rgba(201,125,96,0.35)"
         strokeWidth="1.5"
       />
       <text
         x="70"
         y="118"
         textAnchor="middle"
-        fill="#C89B3C"
+        fill="#C97D60"
         fontSize="11"
         fontFamily="Georgia, serif"
         fontWeight="bold"
@@ -260,7 +260,7 @@ function BottleSVG({
         x="70"
         y="132"
         textAnchor="middle"
-        fill="rgba(249,243,232,0.6)"
+        fill="rgba(242,229,215,0.6)"
         fontSize="7"
         fontFamily="Arial, sans-serif"
         letterSpacing="2"
@@ -273,7 +273,7 @@ function BottleSVG({
         rx="14"
         ry="5"
         fill="none"
-        stroke="rgba(200,155,60,0.5)"
+        stroke="rgba(201,125,96,0.5)"
         strokeWidth="1"
       />
       <line
@@ -281,20 +281,20 @@ function BottleSVG({
         y1="145"
         x2="70"
         y2="155"
-        stroke="rgba(200,155,60,0.5)"
+        stroke="rgba(201,125,96,0.5)"
         strokeWidth="1"
       />
       <text
         x="70"
         y="168"
         textAnchor="middle"
-        fill="rgba(249,243,232,0.4)"
+        fill="rgba(242,229,215,0.4)"
         fontSize="7"
         fontFamily="Arial, sans-serif"
       >
         120 mL / 4 fl oz
       </text>
-      <rect x="30" y="188" width="80" height="4" rx="2" fill="#5C2A0A" />
+      <rect x="30" y="188" width="80" height="4" rx="2" fill="#262322" />
       <rect
         x="36"
         y="82"
@@ -315,7 +315,7 @@ function FAQSection() {
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <span
             style={{
-              color: "#C89B3C",
+              color: "#C97D60",
               fontSize: 12,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
@@ -327,7 +327,7 @@ function FAQSection() {
           <h2
             style={{
               fontFamily: "'Playfair Display', serif",
-              color: "#5C2A0A",
+              color: "#262322",
               fontSize: "clamp(32px, 4vw, 48px)",
               marginTop: 12,
             }}
@@ -343,8 +343,8 @@ function FAQSection() {
                   borderRadius: 16,
                   overflow: "hidden",
                   background: "#fff",
-                  border: "1px solid rgba(200,155,60,0.15)",
-                  boxShadow: "0 2px 12px rgba(92,42,10,0.05)",
+                  border: "1px solid rgba(201,125,96,0.15)",
+                  boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
                 }}
               >
                 <button
@@ -365,7 +365,7 @@ function FAQSection() {
                   <span
                     style={{
                       fontFamily: "'Playfair Display', serif",
-                      color: "#5C2A0A",
+                      color: "#262322",
                       fontSize: 16,
                       fontWeight: 600,
                     }}
@@ -376,7 +376,7 @@ function FAQSection() {
                     animate={{ rotate: open === i ? 45 : 0 }}
                     transition={{ duration: 0.2 }}
                     style={{
-                      color: "#C89B3C",
+                      color: "#C97D60",
                       fontSize: 24,
                       flexShrink: 0,
                       lineHeight: 1,
@@ -398,10 +398,10 @@ function FAQSection() {
                       <div
                         style={{
                           padding: "0 24px 20px",
-                          color: "#9B6535",
+                          color: "#9B6B5A",
                           fontSize: 14,
                           lineHeight: 1.8,
-                          borderTop: "1px solid rgba(200,155,60,0.1)",
+                          borderTop: "1px solid rgba(201,125,96,0.1)",
                         }}
                       >
                         <div style={{ paddingTop: 16 }}>{faq.a}</div>
@@ -440,8 +440,8 @@ export default function Home() {
   return (
     <div
       style={{
-        background: "#FBF6F0",
-        color: "#5C2A0A",
+        background: "#F2E5D7",
+        color: "#262322",
         fontFamily: "'Inter', system-ui, sans-serif",
       }}
     >
@@ -453,7 +453,7 @@ export default function Home() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: scrolled ? "rgba(92,42,10,0.97)" : "transparent",
+          background: scrolled ? "rgba(38,35,34,0.97)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
           boxShadow: scrolled ? "0 2px 24px rgba(0,0,0,0.2)" : "none",
           transition: "all 0.3s ease",
@@ -464,8 +464,8 @@ export default function Home() {
           <div
             className="announcement-bar"
             style={{
-              background: "linear-gradient(90deg, #C89B3C, #E8B848)",
-              color: "#5C2A0A",
+              background: "linear-gradient(90deg, #C97D60, #FFBCB5)",
+              color: "#262322",
               textAlign: "center",
               fontSize: 12,
               fontWeight: 600,
@@ -493,7 +493,7 @@ export default function Home() {
             <span
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontWeight: 700,
                 fontSize: 24,
                 letterSpacing: "0.1em",
@@ -513,7 +513,7 @@ export default function Home() {
                 href={l.href}
                 className="nav-link"
                 style={{
-                  color: scrolled ? "#E8B848" : "#FBF6F0",
+                  color: scrolled ? "#FFBCB5" : "#F2E5D7",
                   textDecoration: "none",
                   fontSize: 13,
                   fontWeight: 500,
@@ -532,8 +532,8 @@ export default function Home() {
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
-                background: "#C89B3C",
-                color: "#5C2A0A",
+                background: "#C97D60",
+                color: "#262322",
                 padding: "8px 18px",
                 borderRadius: 999,
                 fontSize: 13,
@@ -566,8 +566,8 @@ export default function Home() {
                     width: 20,
                     height: 20,
                     borderRadius: 999,
-                    background: "#5C2A0A",
-                    color: "#FBF6F0",
+                    background: "#262322",
+                    color: "#F2E5D7",
                     fontSize: 11,
                     fontWeight: 700,
                     display: "flex",
@@ -588,7 +588,7 @@ export default function Home() {
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                color: scrolled ? "#C89B3C" : "#FBF6F0",
+                color: scrolled ? "#C97D60" : "#F2E5D7",
                 padding: 4,
                 lineHeight: 0,
               }}
@@ -633,7 +633,7 @@ export default function Home() {
             style={{
               position: "fixed",
               inset: 0,
-              background: "#5C2A0A",
+              background: "#262322",
               zIndex: 99,
               display: "flex",
               flexDirection: "column",
@@ -648,7 +648,7 @@ export default function Home() {
                 top: 22,
                 left: 24,
                 fontFamily: "'Playfair Display', serif",
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontWeight: 700,
                 fontSize: 22,
                 letterSpacing: "0.1em",
@@ -666,7 +666,7 @@ export default function Home() {
                 right: 20,
                 background: "none",
                 border: "none",
-                color: "#C89B3C",
+                color: "#C97D60",
                 cursor: "pointer",
                 padding: 8,
                 lineHeight: 0,
@@ -708,7 +708,7 @@ export default function Home() {
                   transition={{ delay: idx * 0.06, duration: 0.3 }}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{
-                    color: "#FBF6F0",
+                    color: "#F2E5D7",
                     fontSize: 28,
                     fontFamily: "'Playfair Display', serif",
                     fontWeight: 700,
@@ -716,7 +716,7 @@ export default function Home() {
                     padding: "14px 0",
                     textAlign: "center",
                     width: "100%",
-                    borderBottom: "1px solid rgba(200,155,60,0.1)",
+                    borderBottom: "1px solid rgba(201,125,96,0.1)",
                   }}
                 >
                   {l.label}
@@ -738,10 +738,10 @@ export default function Home() {
                   borderRadius: 999,
                   fontWeight: 700,
                   fontSize: 16,
-                  background: "linear-gradient(135deg, #C89B3C, #E8B848)",
-                  color: "#5C2A0A",
+                  background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
+                  color: "#262322",
                   textDecoration: "none",
-                  boxShadow: "0 8px 28px rgba(200,155,60,0.35)",
+                  boxShadow: "0 8px 28px rgba(201,125,96,0.35)",
                 }}
               >
                 Shop Now — $38
@@ -761,7 +761,7 @@ export default function Home() {
           position: "relative",
           overflow: "hidden",
           background:
-            "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 55%, #180C04 100%)",
+            "linear-gradient(160deg, #262322 0%, #63372C 55%, #180C04 100%)",
         }}
       >
         {/* Dot pattern */}
@@ -771,7 +771,7 @@ export default function Home() {
             inset: 0,
             opacity: 0.04,
             backgroundImage:
-              "radial-gradient(circle at 2px 2px, #C89B3C 1px, transparent 0)",
+              "radial-gradient(circle at 2px 2px, #C97D60 1px, transparent 0)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -784,7 +784,7 @@ export default function Home() {
             width: 280,
             height: 280,
             borderRadius: "50%",
-            background: "#C89B3C",
+            background: "#C97D60",
             opacity: 0.08,
             filter: "blur(60px)",
           }}
@@ -797,7 +797,7 @@ export default function Home() {
             width: 200,
             height: 200,
             borderRadius: "50%",
-            background: "#E8B848",
+            background: "#FFBCB5",
             opacity: 0.08,
             filter: "blur(60px)",
           }}
@@ -830,9 +830,9 @@ export default function Home() {
                 fontSize: 12,
                 fontWeight: 500,
                 marginBottom: 24,
-                background: "rgba(200,155,60,0.15)",
-                color: "#E8B848",
-                border: "1px solid rgba(200,155,60,0.3)",
+                background: "rgba(201,125,96,0.15)",
+                color: "#FFBCB5",
+                border: "1px solid rgba(201,125,96,0.3)",
               }}
             >
               🇭🇹 Rooted in Haitian Tradition
@@ -848,7 +848,7 @@ export default function Home() {
               }}
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                color: "#FBF6F0",
+                color: "#F2E5D7",
                 fontWeight: 700,
                 fontSize: "clamp(42px, 6vw, 72px)",
                 lineHeight: 1.1,
@@ -856,7 +856,7 @@ export default function Home() {
               }}
             >
               Hair Oil That{" "}
-              <em style={{ fontStyle: "italic", color: "#E8B848" }}>
+              <em style={{ fontStyle: "italic", color: "#FFBCB5" }}>
                 Nourishes
               </em>{" "}
               From Root to Tip
@@ -868,7 +868,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.35 }}
               className="hero-desc"
               style={{
-                color: "rgba(249,243,232,0.72)",
+                color: "rgba(242,229,215,0.72)",
                 fontSize: 18,
                 lineHeight: 1.7,
                 marginBottom: 32,
@@ -894,7 +894,7 @@ export default function Home() {
               }}
             >
               <StarRating count={5} />
-              <span style={{ color: "rgba(249,243,232,0.55)", fontSize: 13 }}>
+              <span style={{ color: "rgba(242,229,215,0.55)", fontSize: 13 }}>
                 4.9 · Over 500 reviews
               </span>
             </motion.div>
@@ -918,10 +918,10 @@ export default function Home() {
                   borderRadius: 999,
                   fontWeight: 600,
                   fontSize: 15,
-                  background: "linear-gradient(135deg, #C89B3C, #E8B848)",
-                  color: "#5C2A0A",
+                  background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
+                  color: "#262322",
                   textDecoration: "none",
-                  boxShadow: "0 8px 32px rgba(200,155,60,0.4)",
+                  boxShadow: "0 8px 32px rgba(201,125,96,0.4)",
                 }}
               >
                 Shop Now — $38
@@ -944,7 +944,7 @@ export default function Home() {
                 href="#benefits"
                 whileHover={{
                   scale: 1.03,
-                  background: "rgba(249,243,232,0.1)",
+                  background: "rgba(242,229,215,0.1)",
                 }}
                 style={{
                   display: "inline-flex",
@@ -954,9 +954,9 @@ export default function Home() {
                   borderRadius: 999,
                   fontWeight: 500,
                   fontSize: 15,
-                  color: "#FBF6F0",
+                  color: "#F2E5D7",
                   textDecoration: "none",
-                  border: "1px solid rgba(249,243,232,0.2)",
+                  border: "1px solid rgba(242,229,215,0.2)",
                 }}
               >
                 Learn More
@@ -990,8 +990,8 @@ export default function Home() {
                     fontSize: 12,
                     padding: "6px 12px",
                     borderRadius: 999,
-                    background: "rgba(249,243,232,0.07)",
-                    color: "rgba(249,243,232,0.6)",
+                    background: "rgba(242,229,215,0.07)",
+                    color: "rgba(242,229,215,0.6)",
                   }}
                 >
                   {b}
@@ -1019,7 +1019,7 @@ export default function Home() {
                   inset: 0,
                   borderRadius: "46% 54% 58% 42% / 42% 46% 54% 58%",
                   overflow: "hidden",
-                  background: "#7A3C14",
+                  background: "#63372C",
                 }}
               >
                 {/* Real product photo as background */}
@@ -1037,7 +1037,7 @@ export default function Home() {
                     position: "absolute",
                     inset: 0,
                     background:
-                      "linear-gradient(160deg, rgba(200,155,60,0.12) 0%, transparent 60%, rgba(92,42,10,0.35) 100%)",
+                      "linear-gradient(160deg, rgba(201,125,96,0.12) 0%, transparent 60%, rgba(38,35,34,0.35) 100%)",
                   }}
                 />
               </div>
@@ -1064,7 +1064,7 @@ export default function Home() {
               >
                 <div style={{ display: "flex", gap: 2, marginBottom: 6 }}>
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <span key={i} style={{ color: "#C89B3C", fontSize: 11 }}>
+                    <span key={i} style={{ color: "#C97D60", fontSize: 11 }}>
                       ★
                     </span>
                   ))}
@@ -1072,7 +1072,7 @@ export default function Home() {
                 <p
                   style={{
                     fontSize: 12,
-                    color: "#5C2A0A",
+                    color: "#262322",
                     lineHeight: 1.55,
                     marginBottom: 8,
                     fontStyle: "italic",
@@ -1086,13 +1086,13 @@ export default function Home() {
                       width: 26,
                       height: 26,
                       borderRadius: "50%",
-                      background: "linear-gradient(135deg, #C89B3C, #E8B848)",
+                      background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: 12,
                       fontWeight: 700,
-                      color: "#5C2A0A",
+                      color: "#262322",
                       flexShrink: 0,
                     }}
                   >
@@ -1103,12 +1103,12 @@ export default function Home() {
                       style={{
                         fontSize: 11,
                         fontWeight: 700,
-                        color: "#5C2A0A",
+                        color: "#262322",
                       }}
                     >
                       Aaliyah R.
                     </div>
-                    <div style={{ fontSize: 10, color: "#9B6535" }}>
+                    <div style={{ fontSize: 10, color: "#9B6B5A" }}>
                       ✓ Verified Purchase
                     </div>
                   </div>
@@ -1131,7 +1131,7 @@ export default function Home() {
                   top: 32,
                   right: -20,
                   zIndex: 3,
-                  background: "linear-gradient(135deg, #C89B3C, #E8B848)",
+                  background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
                   borderRadius: "50%",
                   width: 84,
                   height: 84,
@@ -1139,8 +1139,8 @@ export default function Home() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 8px 28px rgba(200,155,60,0.5)",
-                  color: "#5C2A0A",
+                  boxShadow: "0 8px 28px rgba(201,125,96,0.5)",
+                  color: "#262322",
                 }}
               >
                 <span style={{ fontSize: 22, fontWeight: 800, lineHeight: 1 }}>
@@ -1163,7 +1163,7 @@ export default function Home() {
       </section>
 
       {/* STATS STRIP */}
-      <section style={{ background: "#5C2A0A" }}>
+      <section style={{ background: "#262322" }}>
         <div
           className="stats-grid"
           style={{
@@ -1186,7 +1186,7 @@ export default function Home() {
               <div
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  color: "#C89B3C",
+                  color: "#C97D60",
                   fontSize: 28,
                   fontWeight: 700,
                   marginBottom: 4,
@@ -1195,7 +1195,7 @@ export default function Home() {
                 {s.val}
               </div>
               {s.label && (
-                <div style={{ color: "rgba(249,243,232,0.45)", fontSize: 13 }}>
+                <div style={{ color: "rgba(242,229,215,0.45)", fontSize: 13 }}>
                   {s.label}
                 </div>
               )}
@@ -1208,13 +1208,13 @@ export default function Home() {
       <section
         id="benefits"
         className="section-padding"
-        style={{ background: "#FBF6F0" }}
+        style={{ background: "#F2E5D7" }}
       >
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span
               style={{
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1226,13 +1226,13 @@ export default function Home() {
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#5C2A0A",
+                color: "#262322",
                 fontSize: "clamp(32px, 4vw, 48px)",
                 marginTop: 12,
                 marginBottom: 0,
               }}
             >
-              Benefits Your Hair <em style={{ color: "#C89B3C" }}>Deserves</em>
+              Benefits Your Hair <em style={{ color: "#C97D60" }}>Deserves</em>
             </h2>
           </div>
           <div
@@ -1248,15 +1248,15 @@ export default function Home() {
                 <motion.div
                   whileHover={{
                     y: -4,
-                    boxShadow: "0 12px 32px rgba(92,42,10,0.12)",
+                    boxShadow: "0 12px 32px rgba(38,35,34,0.12)",
                   }}
                   transition={{ duration: 0.2 }}
                   style={{
                     padding: 32,
                     borderRadius: 20,
                     background: i % 2 === 0 ? "#fff" : "#F5EBDC",
-                    border: "1px solid rgba(200,155,60,0.12)",
-                    boxShadow: "0 2px 16px rgba(92,42,10,0.06)",
+                    border: "1px solid rgba(201,125,96,0.12)",
+                    boxShadow: "0 2px 16px rgba(38,35,34,0.06)",
                   }}
                 >
                   <motion.div
@@ -1277,7 +1277,7 @@ export default function Home() {
                   <h3
                     style={{
                       fontFamily: "'Playfair Display', serif",
-                      color: "#5C2A0A",
+                      color: "#262322",
                       fontSize: 20,
                       fontWeight: 600,
                       marginBottom: 8,
@@ -1286,7 +1286,7 @@ export default function Home() {
                     {b.title}
                   </h3>
                   <p
-                    style={{ color: "#9B6535", fontSize: 14, lineHeight: 1.7 }}
+                    style={{ color: "#9B6B5A", fontSize: 14, lineHeight: 1.7 }}
                   >
                     {b.desc}
                   </p>
@@ -1301,7 +1301,7 @@ export default function Home() {
       <section
         id="order"
         className="section-padding"
-        style={{ background: "linear-gradient(160deg, #5C2A0A 0%, #7A3C14 100%)" }}
+        style={{ background: "linear-gradient(160deg, #262322 0%, #63372C 100%)" }}
       >
         <div
           className="order-grid"
@@ -1318,7 +1318,7 @@ export default function Home() {
           <div>
             <span
               style={{
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1330,7 +1330,7 @@ export default function Home() {
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#FBF6F0",
+                color: "#F2E5D7",
                 fontSize: "clamp(32px, 4vw, 48px)",
                 marginTop: 12,
                 marginBottom: 24,
@@ -1339,11 +1339,11 @@ export default function Home() {
             >
               Longtress
               <br />
-              <em style={{ color: "#C89B3C" }}>Haitian Hair Oil</em>
+              <em style={{ color: "#C97D60" }}>Haitian Hair Oil</em>
             </h2>
             <p
               style={{
-                color: "rgba(249,243,232,0.55)",
+                color: "rgba(242,229,215,0.55)",
                 fontSize: 13,
                 marginBottom: 20,
                 display: "flex",
@@ -1357,7 +1357,7 @@ export default function Home() {
             </p>
             <p
               style={{
-                color: "rgba(249,243,232,0.7)",
+                color: "rgba(242,229,215,0.7)",
                 fontSize: 15,
                 lineHeight: 1.8,
                 marginBottom: 28,
@@ -1390,13 +1390,13 @@ export default function Home() {
                   style={{
                     display: "flex",
                     gap: 10,
-                    color: "rgba(249,243,232,0.78)",
+                    color: "rgba(242,229,215,0.78)",
                     fontSize: 14,
                     alignItems: "flex-start",
                   }}
                 >
                   <span
-                    style={{ color: "#C89B3C", flexShrink: 0, marginTop: 2 }}
+                    style={{ color: "#C97D60", flexShrink: 0, marginTop: 2 }}
                   >
                     ✓
                   </span>
@@ -1418,10 +1418,10 @@ export default function Home() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  border: "1px solid rgba(200,155,60,0.3)",
+                  border: "1px solid rgba(201,125,96,0.3)",
                   borderRadius: 999,
                   overflow: "hidden",
-                  background: "rgba(249,243,232,0.05)",
+                  background: "rgba(242,229,215,0.05)",
                 }}
               >
                 <button
@@ -1431,7 +1431,7 @@ export default function Home() {
                     height: 48,
                     background: "none",
                     border: "none",
-                    color: "#C89B3C",
+                    color: "#C97D60",
                     fontSize: 20,
                     cursor: "pointer",
                   }}
@@ -1442,7 +1442,7 @@ export default function Home() {
                   style={{
                     width: 32,
                     textAlign: "center",
-                    color: "#FBF6F0",
+                    color: "#F2E5D7",
                     fontWeight: 500,
                   }}
                 >
@@ -1455,7 +1455,7 @@ export default function Home() {
                     height: 48,
                     background: "none",
                     border: "none",
-                    color: "#C89B3C",
+                    color: "#C97D60",
                     fontSize: 20,
                     cursor: "pointer",
                   }}
@@ -1474,12 +1474,12 @@ export default function Home() {
                   cursor: "pointer",
                   border: "none",
                   background: addedToCart
-                    ? "rgba(249,243,232,0.08)"
-                    : "linear-gradient(135deg, #C89B3C, #E8B848)",
-                  color: addedToCart ? "#C89B3C" : "#5C2A0A",
+                    ? "rgba(242,229,215,0.08)"
+                    : "linear-gradient(135deg, #C97D60, #FFBCB5)",
+                  color: addedToCart ? "#C97D60" : "#262322",
                   boxShadow: addedToCart
                     ? "none"
-                    : "0 8px 24px rgba(200,155,60,0.4)",
+                    : "0 8px 24px rgba(201,125,96,0.4)",
                   transition: "all 0.3s ease",
                 }}
               >
@@ -1493,7 +1493,7 @@ export default function Home() {
               <Link
                 href="/checkout"
                 style={{
-                  color: "rgba(200,155,60,0.8)",
+                  color: "rgba(201,125,96,0.8)",
                   fontSize: 13,
                   textDecoration: "underline",
                 }}
@@ -1509,15 +1509,15 @@ export default function Home() {
                 gap: 10,
                 padding: 16,
                 borderRadius: 14,
-                background: "rgba(249,243,232,0.05)",
-                border: "1px solid rgba(200,155,60,0.1)",
+                background: "rgba(242,229,215,0.05)",
+                border: "1px solid rgba(201,125,96,0.1)",
               }}
             >
               <svg
                 width="18"
                 height="18"
                 fill="none"
-                stroke="#C89B3C"
+                stroke="#C97D60"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -1527,7 +1527,7 @@ export default function Home() {
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
-              <span style={{ color: "rgba(249,243,232,0.55)", fontSize: 13 }}>
+              <span style={{ color: "rgba(242,229,215,0.55)", fontSize: 13 }}>
                 Secure checkout · 256-bit SSL · Powered by Stripe
               </span>
             </div>
@@ -1545,7 +1545,7 @@ export default function Home() {
                   inset: 0,
                   borderRadius: "50%",
                   background:
-                    "radial-gradient(circle, rgba(200,155,60,0.2), transparent 70%)",
+                    "radial-gradient(circle, rgba(201,125,96,0.2), transparent 70%)",
                   filter: "blur(40px)",
                   transform: "scale(1.5)",
                 }}
@@ -1555,8 +1555,8 @@ export default function Home() {
                   position: "relative",
                   padding: 20,
                   borderRadius: 32,
-                  background: "rgba(249,243,232,0.04)",
-                  border: "1px solid rgba(200,155,60,0.15)",
+                  background: "rgba(242,229,215,0.04)",
+                  border: "1px solid rgba(201,125,96,0.15)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -1594,7 +1594,7 @@ export default function Home() {
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span
               style={{
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1606,7 +1606,7 @@ export default function Home() {
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#5C2A0A",
+                color: "#262322",
                 fontSize: "clamp(32px, 4vw, 48px)",
                 marginTop: 12,
               }}
@@ -1627,7 +1627,7 @@ export default function Home() {
                 <motion.div
                   whileHover={{
                     y: -3,
-                    boxShadow: "0 8px 24px rgba(92,42,10,0.1)",
+                    boxShadow: "0 8px 24px rgba(38,35,34,0.1)",
                   }}
                   style={{
                     padding: 24,
@@ -1636,8 +1636,8 @@ export default function Home() {
                     gap: 16,
                     alignItems: "flex-start",
                     background: "#fff",
-                    border: "1px solid rgba(200,155,60,0.1)",
-                    boxShadow: "0 2px 12px rgba(92,42,10,0.05)",
+                    border: "1px solid rgba(201,125,96,0.1)",
+                    boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
                   }}
                 >
                   <div
@@ -1646,8 +1646,8 @@ export default function Home() {
                       height: 32,
                       borderRadius: "50%",
                       flexShrink: 0,
-                      background: "rgba(200,155,60,0.1)",
-                      color: "#C89B3C",
+                      background: "rgba(201,125,96,0.1)",
+                      color: "#C97D60",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -1662,7 +1662,7 @@ export default function Home() {
                       style={{
                         fontWeight: 600,
                         fontSize: 14,
-                        color: "#5C2A0A",
+                        color: "#262322",
                         marginBottom: 4,
                       }}
                     >
@@ -1671,7 +1671,7 @@ export default function Home() {
                     <div
                       style={{
                         fontSize: 12,
-                        color: "#9B6535",
+                        color: "#9B6B5A",
                         lineHeight: 1.6,
                       }}
                     >
@@ -1689,13 +1689,13 @@ export default function Home() {
       <section
         id="how-to-use"
         className="section-padding"
-        style={{ background: "#FBF6F0" }}
+        style={{ background: "#F2E5D7" }}
       >
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span
               style={{
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1707,7 +1707,7 @@ export default function Home() {
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#5C2A0A",
+                color: "#262322",
                 fontSize: "clamp(32px, 4vw, 48px)",
                 marginTop: 12,
               }}
@@ -1728,15 +1728,15 @@ export default function Home() {
                       height: 64,
                       flexShrink: 0,
                       borderRadius: 20,
-                      background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
-                      color: "#C89B3C",
+                      background: "linear-gradient(135deg, #262322, #63372C)",
+                      color: "#C97D60",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontFamily: "'Playfair Display', serif",
                       fontSize: 18,
                       fontWeight: 700,
-                      border: "1px solid rgba(200,155,60,0.2)",
+                      border: "1px solid rgba(201,125,96,0.2)",
                       cursor: "default",
                     }}
                   >
@@ -1746,7 +1746,7 @@ export default function Home() {
                     <h3
                       style={{
                         fontFamily: "'Playfair Display', serif",
-                        color: "#5C2A0A",
+                        color: "#262322",
                         fontSize: 20,
                         fontWeight: 600,
                         marginBottom: 8,
@@ -1756,7 +1756,7 @@ export default function Home() {
                     </h3>
                     <p
                       style={{
-                        color: "#9B6535",
+                        color: "#9B6B5A",
                         fontSize: 14,
                         lineHeight: 1.8,
                       }}
@@ -1778,13 +1778,13 @@ export default function Home() {
       <section
         id="reviews"
         className="section-padding"
-        style={{ background: "#5C2A0A" }}
+        style={{ background: "#262322" }}
       >
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <span
               style={{
-                color: "#C89B3C",
+                color: "#C97D60",
                 fontSize: 12,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
@@ -1796,7 +1796,7 @@ export default function Home() {
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#FBF6F0",
+                color: "#F2E5D7",
                 fontSize: "clamp(32px, 4vw, 48px)",
                 marginTop: 12,
               }}
@@ -1813,7 +1813,7 @@ export default function Home() {
               }}
             >
               <StarRating count={5} />
-              <span style={{ color: "rgba(249,243,232,0.45)", fontSize: 13 }}>
+              <span style={{ color: "rgba(242,229,215,0.45)", fontSize: 13 }}>
                 4.9 average · 500+ reviews
               </span>
             </div>
@@ -1838,8 +1838,8 @@ export default function Home() {
                   style={{
                     borderRadius: 24,
                     overflow: "hidden",
-                    background: "rgba(249,243,232,0.04)",
-                    border: "1px solid rgba(200,155,60,0.15)",
+                    background: "rgba(242,229,215,0.04)",
+                    border: "1px solid rgba(201,125,96,0.15)",
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
@@ -1868,13 +1868,13 @@ export default function Home() {
                         position: "absolute",
                         bottom: 12,
                         right: 12,
-                        background: "rgba(92,42,10,0.85)",
+                        background: "rgba(38,35,34,0.85)",
                         backdropFilter: "blur(8px)",
                         borderRadius: 999,
                         padding: "5px 12px",
                         fontSize: 11,
                         fontWeight: 600,
-                        color: "#C89B3C",
+                        color: "#C97D60",
                         letterSpacing: "0.04em",
                       }}
                     >
@@ -1886,7 +1886,7 @@ export default function Home() {
                         position: "absolute",
                         bottom: 12,
                         left: 12,
-                        background: "rgba(92,42,10,0.85)",
+                        background: "rgba(38,35,34,0.85)",
                         backdropFilter: "blur(8px)",
                         borderRadius: 999,
                         padding: "5px 12px",
@@ -1895,7 +1895,7 @@ export default function Home() {
                         gap: 5,
                         fontSize: 11,
                         fontWeight: 600,
-                        color: "#E8B848",
+                        color: "#FFBCB5",
                       }}
                     >
                       <span>{r.resultIcon}</span>
@@ -1916,7 +1916,7 @@ export default function Home() {
                     <StarRating count={r.rating} />
                     <p
                       style={{
-                        color: "rgba(249,243,232,0.75)",
+                        color: "rgba(242,229,215,0.75)",
                         fontSize: 13,
                         lineHeight: 1.85,
                         flex: 1,
@@ -1934,9 +1934,9 @@ export default function Home() {
                             fontSize: 11,
                             padding: "4px 10px",
                             borderRadius: 999,
-                            background: "rgba(200,155,60,0.1)",
-                            color: "#C89B3C",
-                            border: "1px solid rgba(200,155,60,0.2)",
+                            background: "rgba(201,125,96,0.1)",
+                            color: "#C97D60",
+                            border: "1px solid rgba(201,125,96,0.2)",
                           }}
                         >
                           {tag}
@@ -1951,7 +1951,7 @@ export default function Home() {
                         alignItems: "center",
                         gap: 10,
                         paddingTop: 4,
-                        borderTop: "1px solid rgba(249,243,232,0.06)",
+                        borderTop: "1px solid rgba(242,229,215,0.06)",
                       }}
                     >
                       <div
@@ -1961,11 +1961,11 @@ export default function Home() {
                           borderRadius: "50%",
                           flexShrink: 0,
                           background:
-                            "linear-gradient(135deg, #C89B3C, #E8B848)",
+                            "linear-gradient(135deg, #C97D60, #FFBCB5)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: "#5C2A0A",
+                          color: "#262322",
                           fontWeight: 700,
                           fontSize: 13,
                         }}
@@ -1977,7 +1977,7 @@ export default function Home() {
                           style={{
                             fontWeight: 600,
                             fontSize: 13,
-                            color: "#FBF6F0",
+                            color: "#F2E5D7",
                           }}
                         >
                           {r.name}
@@ -1985,7 +1985,7 @@ export default function Home() {
                         <span
                           style={{
                             fontSize: 10,
-                            color: "rgba(200,155,60,0.7)",
+                            color: "rgba(201,125,96,0.7)",
                           }}
                         >
                           ✓ Verified Purchase
@@ -2004,7 +2004,7 @@ export default function Home() {
       <section
         className="section-padding"
         style={{
-          background: "#FBF6F0",
+          background: "#F2E5D7",
           textAlign: "center",
         }}
       >
@@ -2013,16 +2013,16 @@ export default function Home() {
           <h2
             style={{
               fontFamily: "'Playfair Display', serif",
-              color: "#5C2A0A",
+              color: "#262322",
               fontSize: "clamp(32px, 4vw, 48px)",
               marginBottom: 16,
               lineHeight: 1.2,
             }}
           >
             Ready for Healthy,{" "}
-            <em style={{ color: "#C89B3C" }}>Beautiful Hair?</em>
+            <em style={{ color: "#C97D60" }}>Beautiful Hair?</em>
           </h2>
-          <p style={{ color: "#9B6535", fontSize: 15, marginBottom: 32 }}>
+          <p style={{ color: "#9B6B5A", fontSize: 15, marginBottom: 32 }}>
             Join thousands who have transformed their hair with Longtress. Free
             shipping on orders over $60.
           </p>
@@ -2037,10 +2037,10 @@ export default function Home() {
               borderRadius: 999,
               fontWeight: 600,
               fontSize: 15,
-              background: "linear-gradient(135deg, #5C2A0A, #7A3C14)",
-              color: "#C89B3C",
+              background: "linear-gradient(135deg, #262322, #63372C)",
+              color: "#C97D60",
               textDecoration: "none",
-              boxShadow: "0 8px 32px rgba(92,42,10,0.22)",
+              boxShadow: "0 8px 32px rgba(38,35,34,0.22)",
             }}
           >
             Get Longtress — $38
@@ -2059,18 +2059,18 @@ export default function Home() {
               />
             </svg>
           </a>
-          <p style={{ color: "#9B6535", fontSize: 12, marginTop: 16 }}>
+          <p style={{ color: "#9B6B5A", fontSize: 12, marginTop: 16 }}>
             30-day satisfaction guarantee · Free returns
           </p>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: "#5C2A0A" }}>
+      <footer style={{ background: "#262322" }}>
         {/* Newsletter strip */}
         <div
           style={{
-            borderBottom: "1px solid rgba(249,243,232,0.07)",
+            borderBottom: "1px solid rgba(242,229,215,0.07)",
             padding: "48px 24px",
           }}
         >
@@ -2079,7 +2079,7 @@ export default function Home() {
             <h3
               style={{
                 fontFamily: "'Playfair Display', serif",
-                color: "#FBF6F0",
+                color: "#F2E5D7",
                 fontSize: 24,
                 fontWeight: 700,
                 marginBottom: 8,
@@ -2089,7 +2089,7 @@ export default function Home() {
             </h3>
             <p
               style={{
-                color: "rgba(249,243,232,0.45)",
+                color: "rgba(242,229,215,0.45)",
                 fontSize: 13,
                 marginBottom: 24,
               }}
@@ -2104,7 +2104,7 @@ export default function Home() {
                 margin: "0 auto",
                 borderRadius: 999,
                 overflow: "hidden",
-                border: "1px solid rgba(200,155,60,0.3)",
+                border: "1px solid rgba(201,125,96,0.3)",
               }}
             >
               <input
@@ -2114,10 +2114,10 @@ export default function Home() {
                 style={{
                   flex: 1,
                   padding: "13px 20px",
-                  background: "rgba(249,243,232,0.05)",
+                  background: "rgba(242,229,215,0.05)",
                   border: "none",
                   outline: "none",
-                  color: "#FBF6F0",
+                  color: "#F2E5D7",
                   fontSize: 13,
                   fontFamily: "'Inter', sans-serif",
                 }}
@@ -2127,9 +2127,9 @@ export default function Home() {
                 className="newsletter-btn"
                 style={{
                   padding: "13px 24px",
-                  background: "linear-gradient(135deg, #C89B3C, #E8B848)",
+                  background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
                   border: "none",
-                  color: "#5C2A0A",
+                  color: "#262322",
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: "pointer",
@@ -2159,7 +2159,7 @@ export default function Home() {
               <div
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  color: "#C89B3C",
+                  color: "#C97D60",
                   fontSize: 22,
                   fontWeight: 700,
                   letterSpacing: "0.1em",
@@ -2170,7 +2170,7 @@ export default function Home() {
               </div>
               <p
                 style={{
-                  color: "rgba(249,243,232,0.35)",
+                  color: "rgba(242,229,215,0.35)",
                   fontSize: 13,
                   lineHeight: 1.7,
                   marginBottom: 20,
@@ -2205,7 +2205,7 @@ export default function Home() {
                       width: 36,
                       height: 36,
                       borderRadius: "50%",
-                      background: "rgba(249,243,232,0.07)",
+                      background: "rgba(242,229,215,0.07)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -2216,7 +2216,7 @@ export default function Home() {
                       width="16"
                       height="16"
                       viewBox="0 0 24 24"
-                      fill="rgba(249,243,232,0.5)"
+                      fill="rgba(242,229,215,0.5)"
                     >
                       <path d={path} />
                     </svg>
@@ -2230,7 +2230,7 @@ export default function Home() {
               <div>
                 <div
                   style={{
-                    color: "#FBF6F0",
+                    color: "#F2E5D7",
                     fontSize: 13,
                     fontWeight: 600,
                     letterSpacing: "0.08em",
@@ -2246,7 +2246,7 @@ export default function Home() {
                       <a
                         href="#"
                         style={{
-                          color: "rgba(249,243,232,0.4)",
+                          color: "rgba(242,229,215,0.4)",
                           fontSize: 13,
                           textDecoration: "none",
                         }}
@@ -2260,7 +2260,7 @@ export default function Home() {
               <div>
                 <div
                   style={{
-                    color: "#FBF6F0",
+                    color: "#F2E5D7",
                     fontSize: 13,
                     fontWeight: 600,
                     letterSpacing: "0.08em",
@@ -2276,7 +2276,7 @@ export default function Home() {
                       <a
                         href="#"
                         style={{
-                          color: "rgba(249,243,232,0.4)",
+                          color: "rgba(242,229,215,0.4)",
                           fontSize: 13,
                           textDecoration: "none",
                         }}
@@ -2290,7 +2290,7 @@ export default function Home() {
               <div>
                 <div
                   style={{
-                    color: "#FBF6F0",
+                    color: "#F2E5D7",
                     fontSize: 13,
                     fontWeight: 600,
                     letterSpacing: "0.08em",
@@ -2305,7 +2305,7 @@ export default function Home() {
                     <a
                       href={l === "FAQ" ? "#faq" : "#"}
                       style={{
-                        color: "rgba(249,243,232,0.4)",
+                        color: "rgba(242,229,215,0.4)",
                         fontSize: 13,
                         textDecoration: "none",
                       }}
@@ -2317,7 +2317,7 @@ export default function Home() {
                 <Link
                   href="/admin"
                   style={{
-                    color: "rgba(249,243,232,0.25)",
+                    color: "rgba(242,229,215,0.25)",
                     fontSize: 12,
                     textDecoration: "none",
                   }}
@@ -2332,10 +2332,10 @@ export default function Home() {
             style={{
               marginTop: 40,
               paddingTop: 24,
-              borderTop: "1px solid rgba(249,243,232,0.08)",
+              borderTop: "1px solid rgba(242,229,215,0.08)",
               display: "flex",
               justifyContent: "space-between",
-              color: "rgba(249,243,232,0.22)",
+              color: "rgba(242,229,215,0.22)",
               fontSize: 12,
               flexWrap: "wrap",
               gap: 8,
@@ -2354,17 +2354,17 @@ export default function Home() {
         /* Premium: focus and hover polish */
         a:focus-visible, button:focus-visible, input:focus-visible {
           outline: none;
-          box-shadow: 0 0 0 2px #C89B3C;
+          box-shadow: 0 0 0 2px #C97D60;
         }
         .footer-social-link {
           transition: background 0.2s ease, transform 0.2s ease;
         }
         .footer-social-link:hover {
-          background: rgba(249,243,232,0.14) !important;
+          background: rgba(242,229,215,0.14) !important;
           transform: translateY(-2px);
         }
         .newsletter-input:focus {
-          box-shadow: inset 0 0 0 1px rgba(200,155,60,0.5);
+          box-shadow: inset 0 0 0 1px rgba(201,125,96,0.5);
         }
         .newsletter-btn {
           transition: opacity 0.2s ease, filter 0.2s ease;
@@ -2376,7 +2376,7 @@ export default function Home() {
         .nav-link { transition: opacity 0.2s ease; }
         .nav-link:hover { opacity: 0.85; }
         .cta-primary { transition: transform 0.2s ease, box-shadow 0.2s ease; display: inline-flex !important; }
-        .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(92,42,10,0.28) !important; }
+        .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(38,35,34,0.28) !important; }
 
         .section-padding { padding: var(--section-padding-y) 24px; }
         .hero-grid {
