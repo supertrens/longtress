@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, internalMutation } from "./_generated/server";
 
 export const get = query({
   args: {},
@@ -9,26 +9,32 @@ export const get = query({
   },
 });
 
-export const update = mutation({
+export const update = internalMutation({
   args: {
     id: v.id("products"),
     name: v.optional(v.string()),
     description: v.optional(v.string()),
     price: v.optional(v.number()),
     stock: v.optional(v.number()),
-    status: v.optional(v.string()),
+    status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
   },
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
     const filtered = Object.fromEntries(
-      Object.entries(updates).filter(([, v]) => v !== undefined)
+      Object.entries(updates).filter(([, v]) => v !== undefined),
     );
+    if (filtered.price !== undefined && (filtered.price as number) < 0) {
+      throw new Error("Price cannot be negative");
+    }
+    if (filtered.stock !== undefined && (filtered.stock as number) < 0) {
+      throw new Error("Stock cannot be negative");
+    }
     await ctx.db.patch(id, filtered);
     return ctx.db.get(id);
   },
 });
 
-export const seed = mutation({
+export const seed = internalMutation({
   args: {},
   handler: async (ctx) => {
     const existing = await ctx.db.query("products").first();

@@ -1,37 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Stripe webhooks are now handled by Convex HTTP actions.
-// Point your Stripe webhook URL to:
-//   https://<your-convex-deployment>.convex.site/stripe-webhook
-//
-// This route is kept as a passthrough for local development with
-// the Stripe CLI, which forwards to localhost:3000.
+// Passthrough for local dev: forwards Stripe webhooks to Convex HTTP action.
+// In production, point Stripe directly to your Convex site URL:
+//   https://<deployment>.convex.site/stripe-webhook
 export async function POST(req: NextRequest) {
-  const convexSiteUrl = process.env.NEXT_PUBLIC_CONVEX_URL?.replace(
-    ".cloud",
-    ".site"
-  );
+  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_SITE_URL;
 
-  if (!convexSiteUrl) {
-    console.error("NEXT_PUBLIC_CONVEX_URL is not set");
+  if (!convexUrl) {
+    console.error("NEXT_PUBLIC_CONVEX_SITE_URL is not set");
     return NextResponse.json({ error: "Not configured" }, { status: 500 });
   }
 
   const body = await req.text();
-  const headers: Record<string, string> = {};
-  req.headers.forEach((value, key) => {
-    headers[key] = value;
-  });
+  const signature = req.headers.get("stripe-signature");
 
-  const res = await fetch(`${convexSiteUrl}/stripe-webhook`, {
-    method: "POST",
-    headers,
-    body,
-  });
+  if (!signature) {
+    return NextResponse.json(
+      { error: "Missing stripe-signature" },
+      { status: 400 },
+    );
+  }
 
-  const data = await res.text();
-  return new NextResponse(data, {
-    status: res.status,
-    headers: { "Content-Type": "application/json" },
-  });
+  try {
+    const res = await fetch(`${convexUrl}/stripe-webhook`, {
+      method: "POST",
+      headers: {
+        "stripe-signature": signature,
+        "content-type": req.headers.get("content-type") ?? "application/json",
+      },
+      body,
+    });
+
+    const data = await res.text();
+    return new NextResponse(data, {
+      status: res.status,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Webhook proxy error:", err);
+    return NextResponse.json(
+      { error: "Webhook proxy failed" },
+      { status: 502 },
+    );
+  }
 }

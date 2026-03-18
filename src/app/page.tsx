@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import {
   motion,
   useInView,
@@ -423,6 +425,10 @@ function FAQSection() {
 }
 
 export default function Home() {
+  const product = useQuery(api.products.get);
+  const displayPrice = product?.price ?? 38;
+  const priceLabel = `$${displayPrice}`;
+
   const [scrolled, setScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [qty, setQty] = useState(1);
@@ -748,7 +754,7 @@ export default function Home() {
                   boxShadow: "0 8px 28px rgba(201,125,96,0.35)",
                 }}
               >
-                Shop Now — $38
+                Shop Now — {priceLabel}
               </motion.a>
             </div>
           </motion.div>
@@ -928,7 +934,7 @@ export default function Home() {
                   boxShadow: "0 8px 32px rgba(201,125,96,0.4)",
                 }}
               >
-                Shop Now — $38
+                Shop Now — {priceLabel}
                 <svg
                   width="16"
                   height="16"
@@ -2049,7 +2055,7 @@ export default function Home() {
               boxShadow: "0 8px 32px rgba(38,35,34,0.22)",
             }}
           >
-            Get Longtress — $38
+            Get Longtress — {priceLabel}
             <svg
               width="16"
               height="16"

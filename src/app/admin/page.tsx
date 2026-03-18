@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useQuery, useMutation, useAction } from "convex/react";
+import { useQuery, useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -464,9 +464,9 @@ export default function AdminPage() {
   const rawOrders = useQuery(api.orders.list);
   const product = useQuery(api.products.get);
   const customersData = useQuery(api.orders.customers);
-  const updateProductMut = useMutation(api.products.update);
-  const seedProductMut = useMutation(api.products.seed);
-  const updateStatusAction = useAction(api.orders.updateStatusAndEmail);
+  const updateProductAction = useAction(api.admin.updateProduct);
+  const seedProductAction = useAction(api.admin.seedProduct);
+  const updateStatusAction = useAction(api.admin.updateOrderStatus);
 
   const loadingOrders = rawOrders === undefined;
   const loadingProduct = product === undefined;
@@ -474,9 +474,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (product === null) {
-      seedProductMut().catch(console.error);
+      seedProductAction().catch(console.error);
     }
-  }, [product, seedProductMut]);
+  }, [product, seedProductAction]);
 
   const customers = customersData?.customers ?? [];
   const customerStats = customersData?.stats ?? { total: 0, repeatBuyers: 0, repeatRate: 0 };
@@ -516,7 +516,7 @@ export default function AdminPage() {
     if (!product) return;
     setSavingProduct(true);
     try {
-      await updateProductMut({
+      await updateProductAction({
         id: product._id,
         name: productForm.name,
         price: parseFloat(productForm.price),

@@ -21,19 +21,26 @@ export default defineSchema({
         name: v.string(),
         qty: v.number(),
         price: v.number(),
-      })
+      }),
     ),
     subtotal: v.number(),
     shippingCost: v.number(),
     tax: v.number(),
     total: v.number(),
-    shippingMethod: v.string(),
-    status: v.string(),
+    shippingMethod: v.union(v.literal("standard"), v.literal("express")),
+    status: v.union(
+      v.literal("Pending"),
+      v.literal("Processing"),
+      v.literal("Shipped"),
+      v.literal("Delivered"),
+      v.literal("Cancelled"),
+    ),
     notes: v.optional(v.string()),
   })
     .index("by_status", ["status"])
     .index("by_email", ["customerEmail"])
-    .index("by_stripeSession", ["stripeSessionId"]),
+    .index("by_stripeSession", ["stripeSessionId"])
+    .index("by_orderId", ["orderId"]),
 
   products: defineTable({
     productId: v.string(),
@@ -43,13 +50,13 @@ export default defineSchema({
     stock: v.number(),
     sku: v.string(),
     size: v.string(),
-    status: v.string(),
+    status: v.union(v.literal("active"), v.literal("inactive")),
     imageUrl: v.optional(v.string()),
   }).index("by_sku", ["sku"]),
 
   messages: defineTable({
     orderId: v.string(),
-    senderType: v.string(),
+    senderType: v.union(v.literal("admin"), v.literal("customer")),
     senderName: v.string(),
     body: v.string(),
   }).index("by_order", ["orderId"]),
