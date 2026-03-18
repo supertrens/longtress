@@ -310,7 +310,11 @@ function BottleSVG({
 function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section id="faq" className="section-padding" style={{ background: "#F5EBDC" }}>
+    <section
+      id="faq"
+      className="section-padding"
+      style={{ background: "#F5EBDC" }}
+    >
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <span
@@ -1301,7 +1305,9 @@ export default function Home() {
       <section
         id="order"
         className="section-padding"
-        style={{ background: "linear-gradient(160deg, #262322 0%, #63372C 100%)" }}
+        style={{
+          background: "linear-gradient(160deg, #262322 0%, #63372C 100%)",
+        }}
       >
         <div
           className="order-grid"

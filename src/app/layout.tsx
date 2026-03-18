@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
 import "./globals.css";
 
 const baseUrl =
@@ -85,7 +86,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <ConvexClientProvider>
+          {children}
+        </ConvexClientProvider>
         <Analytics />
       </body>
     </html>

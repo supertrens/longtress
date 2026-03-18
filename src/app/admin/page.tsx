@@ -2,12 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useQuery, useMutation, useAction } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 type Tab = "overview" | "orders" | "product" | "customers";
 type OrderStatus = "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
 
 type Order = {
   id: string;
+  _convexId?: string;
   customer: string;
   email: string;
   phone: string;
@@ -452,48 +456,82 @@ export default function AdminPage() {
   const [tab, setTab] = useState<Tab>("overview");
   const [orderSearch, setOrderSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loadingOrders, setLoadingOrders] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [savingProduct, setSavingProduct] = useState(false);
+  const [productForm, setProductForm] = useState({ name: "", price: "", stock: "", description: "" });
+  const [productFormInit, setProductFormInit] = useState(false);
+
+  const rawOrders = useQuery(api.orders.list);
+  const product = useQuery(api.products.get);
+  const customersData = useQuery(api.orders.customers);
+  const updateProductMut = useMutation(api.products.update);
+  const seedProductMut = useMutation(api.products.seed);
+  const updateStatusAction = useAction(api.orders.updateStatusAndEmail);
+
+  const loadingOrders = rawOrders === undefined;
+  const loadingProduct = product === undefined;
+  const loadingCustomers = customersData === undefined;
 
   useEffect(() => {
-    fetch("/api/orders")
-      .then((r) => r.json())
-      .then((data: {
-        id: string;
-        customer_name: string;
-        customer_email: string;
-        customer_phone: string;
-        created_at: string;
-        status: OrderStatus;
-        total: number;
-        items: { name: string; qty: number; price: number }[];
-        shipping_address: { line1: string; apt?: string; city: string; state: string; zip: string; country: string };
-        notes?: string;
-      }[]) => {
-        setOrders(
-          data.map((o) => ({
-            id: o.id,
-            customer: o.customer_name,
-            email: o.customer_email,
-            phone: o.customer_phone,
-            date: new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-            status: o.status,
-            total: o.total,
-            items: o.items,
-            address: {
-              line1: o.shipping_address.line1,
-              city: o.shipping_address.city,
-              state: o.shipping_address.state,
-              zip: o.shipping_address.zip,
-            },
-            notes: o.notes,
-          }))
-        );
-      })
-      .catch(console.error)
-      .finally(() => setLoadingOrders(false));
-  }, []);
+    if (product === null) {
+      seedProductMut().catch(console.error);
+    }
+  }, [product, seedProductMut]);
+
+  const customers = customersData?.customers ?? [];
+  const customerStats = customersData?.stats ?? { total: 0, repeatBuyers: 0, repeatRate: 0 };
+
+  const orders: Order[] = (rawOrders ?? []).map((o) => ({
+    id: o.orderId,
+    _convexId: o._id,
+    customer: o.customerName,
+    email: o.customerEmail,
+    phone: o.customerPhone,
+    date: new Date(o._creationTime).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    status: o.status as OrderStatus,
+    total: o.total,
+    items: o.items,
+    address: {
+      line1: o.shippingAddress.line1,
+      city: o.shippingAddress.city,
+      state: o.shippingAddress.state,
+      zip: o.shippingAddress.zip,
+    },
+    notes: o.notes,
+  }));
+
+  useEffect(() => {
+    if (product && !productFormInit) {
+      setProductForm({
+        name: product.name,
+        price: product.price.toString(),
+        stock: product.stock.toString(),
+        description: product.description,
+      });
+      setProductFormInit(true);
+    }
+  }, [product, productFormInit]);
+
+  async function handleSaveProduct() {
+    if (!product) return;
+    setSavingProduct(true);
+    try {
+      await updateProductMut({
+        id: product._id,
+        name: productForm.name,
+        price: parseFloat(productForm.price),
+        stock: parseInt(productForm.stock, 10),
+        description: productForm.description,
+      });
+    } catch (err) {
+      console.error("Failed to save product:", err);
+    } finally {
+      setSavingProduct(false);
+    }
+  }
+
+  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
+  const totalOrders = orders.length;
 
   const filtered = orders.filter((o) => {
     const matchesSearch =
@@ -506,15 +544,13 @@ export default function AdminPage() {
   });
 
   async function handleStatusChange(id: string, status: OrderStatus) {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, status } : o))
-    );
-    setSelectedOrder((prev) => (prev?.id === id ? { ...prev, status } : prev));
-    await fetch(`/api/orders/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    }).catch(console.error);
+    const order = orders.find((o) => o.id === id);
+    if (!order?._convexId) return;
+    try {
+      await updateStatusAction({ id: order._convexId as Id<"orders">, status });
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
   }
 
   return (
@@ -741,30 +777,30 @@ export default function AdminPage() {
               <StatCard
                 icon="💰"
                 label="Total Revenue"
-                value="$91,200"
-                change="12.4%"
+                value={`$${totalRevenue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                change="—"
                 up
               />
               <StatCard
                 icon="📦"
                 label="Total Orders"
-                value="500"
-                change="8.1%"
+                value={totalOrders.toLocaleString()}
+                change="—"
                 up
               />
               <StatCard
                 icon="👥"
                 label="Customers"
-                value="1,847"
-                change="15.2%"
+                value={customerStats.total.toLocaleString()}
+                change={`${customerStats.repeatRate}% repeat`}
                 up
               />
               <StatCard
-                icon="🔄"
-                label="Return Rate"
-                value="2.3%"
-                change="0.5%"
-                up={false}
+                icon="📦"
+                label="In Stock"
+                value={product ? `${product.stock} units` : "—"}
+                change={product && product.stock < 100 ? "Low!" : "Good"}
+                up={!product || product.stock >= 100}
               />
             </div>
 
@@ -1237,481 +1273,473 @@ export default function AdminPage() {
 
         {/* ── PRODUCT TAB ── */}
         {tab === "product" && (
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}
-          >
-            {/* Product card */}
-            <div
-              style={{
-                padding: 28,
-                borderRadius: 20,
-                background: "#fff",
-                border: "1px solid rgba(201,125,96,0.1)",
-                boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
-              }}
-            >
-              <div style={{ display: "flex", gap: 20, marginBottom: 24 }}>
-                <div
-                  style={{
-                    width: 80,
-                    height: 100,
-                    borderRadius: 14,
-                    flexShrink: 0,
-                    background: "linear-gradient(135deg, #262322, #63372C)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 30,
-                  }}
-                >
-                  🌿
-                </div>
-                <div>
-                  <h3
-                    style={{
-                      fontFamily: "'Playfair Display', serif",
-                      color: "#262322",
-                      fontSize: 20,
-                      fontWeight: 700,
-                      marginBottom: 4,
-                    }}
-                  >
-                    Longtress Haitian Hair Oil
-                  </h3>
-                  <div
-                    style={{ fontSize: 13, color: "#9B6B5A", marginBottom: 8 }}
-                  >
-                    SKU: LT-OIL-001 · 120 mL
-                  </div>
-                  <div
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "4px 12px",
-                      borderRadius: 999,
-                      background: "rgba(38,35,34,0.08)",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      color: "#63372C",
-                    }}
-                  >
-                    ● In Stock
-                  </div>
-                </div>
+          <>
+            {loadingProduct && (
+              <div style={{ padding: 48, textAlign: "center", color: "#9B6B5A", fontSize: 14 }}>
+                Loading product…
               </div>
-
+            )}
+            {!loadingProduct && !product && (
+              <div style={{ padding: 48, textAlign: "center", color: "#9B6B5A", fontSize: 14 }}>
+                No product found.
+              </div>
+            )}
+            {!loadingProduct && product && (
               <div
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}
               >
-                {[
-                  { label: "Price", value: "$38.00" },
-                  { label: "Stock", value: "847 units" },
-                  { label: "Total Sold", value: "500 units" },
-                  { label: "Rating", value: "⭐ 4.9 (500 reviews)" },
-                ].map((row) => (
-                  <div
-                    key={row.label}
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      paddingBottom: 12,
-                      borderBottom: "1px solid rgba(201,125,96,0.08)",
-                    }}
-                  >
-                    <span style={{ fontSize: 13, color: "#9B6B5A" }}>
-                      {row.label}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#262322",
-                      }}
-                    >
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Edit form */}
-            <div
-              style={{
-                padding: 28,
-                borderRadius: 20,
-                background: "#fff",
-                border: "1px solid rgba(201,125,96,0.1)",
-                boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
-              }}
-            >
-              <h3
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  color: "#262322",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  marginBottom: 24,
-                }}
-              >
-                Edit Product
-              </h3>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
-              >
-                {[
-                  {
-                    label: "Product Name",
-                    value: "Longtress Haitian Hair Oil",
-                  },
-                  { label: "Price ($)", value: "38.00" },
-                  { label: "Stock Quantity", value: "847" },
-                ].map((f) => (
-                  <div key={f.label}>
-                    <label
-                      style={{
-                        display: "block",
-                        fontSize: 12,
-                        fontWeight: 500,
-                        color: "#9B6B5A",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {f.label}
-                    </label>
-                    <input
-                      defaultValue={f.value}
-                      style={{
-                        width: "100%",
-                        padding: "11px 14px",
-                        borderRadius: 10,
-                        fontSize: 14,
-                        border: "1px solid rgba(201,125,96,0.2)",
-                        background: "#F2E5D7",
-                        color: "#262322",
-                        outline: "none",
-                      }}
-                    />
-                  </div>
-                ))}
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: 12,
-                      fontWeight: 500,
-                      color: "#9B6B5A",
-                      marginBottom: 6,
-                    }}
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    rows={4}
-                    defaultValue="Premium Haitian black castor oil, cold-pressed and traditionally crafted..."
-                    style={{
-                      width: "100%",
-                      padding: "11px 14px",
-                      borderRadius: 10,
-                      fontSize: 14,
-                      border: "1px solid rgba(201,125,96,0.2)",
-                      background: "#F2E5D7",
-                      color: "#262322",
-                      outline: "none",
-                      resize: "vertical",
-                      fontFamily: "'Inter', system-ui, sans-serif",
-                    }}
-                  />
-                </div>
-                <button
-                  style={{
-                    padding: "13px",
-                    borderRadius: 12,
-                    fontWeight: 600,
-                    fontSize: 14,
-                    cursor: "pointer",
-                    background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
-                    color: "#262322",
-                    border: "none",
-                  }}
-                >
-                  Save Changes
-                </button>
-              </div>
-            </div>
-
-            {/* Inventory alert */}
-            <div
-              style={{
-                gridColumn: "1 / -1",
-                padding: 20,
-                borderRadius: 16,
-                background: "rgba(201,125,96,0.08)",
-                border: "1px solid rgba(201,125,96,0.2)",
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-              }}
-            >
-              <span style={{ fontSize: 24 }}>⚠️</span>
-              <div>
+                {/* Product card */}
                 <div
                   style={{
-                    fontWeight: 600,
-                    color: "#A0614A",
-                    fontSize: 14,
-                    marginBottom: 2,
-                  }}
-                >
-                  Low Stock Alert Threshold
-                </div>
-                <div style={{ fontSize: 13, color: "#9B6B5A" }}>
-                  You have set an alert when stock falls below 100 units.
-                  Current stock: 847 units — you are good!
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── CUSTOMERS TAB ── */}
-        {tab === "customers" && (
-          <div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 20,
-                marginBottom: 24,
-              }}
-            >
-              {[
-                {
-                  icon: "👥",
-                  label: "Total Customers",
-                  value: "1,847",
-                  note: "+15% this month",
-                },
-                {
-                  icon: "🔁",
-                  label: "Repeat Buyers",
-                  value: "62%",
-                  note: "Order 2+ times",
-                },
-                {
-                  icon: "⭐",
-                  label: "Avg. Rating",
-                  value: "4.9",
-                  note: "From verified buyers",
-                },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  style={{
-                    padding: 24,
+                    padding: 28,
                     borderRadius: 20,
                     background: "#fff",
                     border: "1px solid rgba(201,125,96,0.1)",
                     boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
                   }}
                 >
-                  <div style={{ fontSize: 28, marginBottom: 12 }}>{s.icon}</div>
-                  <div
-                    style={{
-                      fontFamily: "'Playfair Display', serif",
-                      fontSize: 28,
-                      fontWeight: 700,
-                      color: "#262322",
-                      marginBottom: 4,
-                    }}
-                  >
-                    {s.value}
-                  </div>
-                  <div
-                    style={{ fontSize: 13, color: "#9B6B5A", fontWeight: 500 }}
-                  >
-                    {s.label}
-                  </div>
-                  <div style={{ fontSize: 12, color: "#C97D60", marginTop: 4 }}>
-                    {s.note}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Customer list */}
-            <div
-              style={{
-                borderRadius: 20,
-                background: "#fff",
-                border: "1px solid rgba(201,125,96,0.1)",
-                boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
-                overflow: "hidden",
-              }}
-            >
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr
-                    style={{
-                      background: "rgba(38,35,34,0.03)",
-                      borderBottom: "1px solid rgba(201,125,96,0.12)",
-                    }}
-                  >
-                    {[
-                      "Customer",
-                      "Orders",
-                      "Spent",
-                      "Last Order",
-                      "Status",
-                    ].map((h) => (
-                      <th
-                        key={h}
-                        style={{
-                          padding: "14px 20px",
-                          textAlign: "left",
-                          fontSize: 12,
-                          fontWeight: 600,
-                          color: "#9B6B5A",
-                          letterSpacing: "0.05em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      name: "Jasmine T.",
-                      email: "jasmine@email.com",
-                      orders: 3,
-                      spent: 114,
-                      last: "Mar 8",
-                      vip: true,
-                    },
-                    {
-                      name: "Monique B.",
-                      email: "monique@email.com",
-                      orders: 2,
-                      spent: 76,
-                      last: "Mar 7",
-                      vip: false,
-                    },
-                    {
-                      name: "Aaliyah R.",
-                      email: "aaliyah@email.com",
-                      orders: 1,
-                      spent: 38,
-                      last: "Mar 7",
-                      vip: false,
-                    },
-                    {
-                      name: "Tanya M.",
-                      email: "tanya@email.com",
-                      orders: 5,
-                      spent: 190,
-                      last: "Mar 6",
-                      vip: true,
-                    },
-                    {
-                      name: "Simone D.",
-                      email: "simone@email.com",
-                      orders: 1,
-                      spent: 38,
-                      last: "Mar 5",
-                      vip: false,
-                    },
-                  ].map((c, i, arr) => (
-                    <tr
-                      key={c.email}
+                  <div style={{ display: "flex", gap: 20, marginBottom: 24 }}>
+                    <div
                       style={{
-                        borderBottom:
-                          i < arr.length - 1
-                            ? "1px solid rgba(201,125,96,0.08)"
-                            : "none",
+                        width: 80,
+                        height: 100,
+                        borderRadius: 14,
+                        flexShrink: 0,
+                        background: "linear-gradient(135deg, #262322, #63372C)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 30,
                       }}
                     >
-                      <td style={{ padding: "16px 20px" }}>
-                        <div
+                      🌿
+                    </div>
+                    <div>
+                      <h3
+                        style={{
+                          fontFamily: "'Playfair Display', serif",
+                          color: "#262322",
+                          fontSize: 20,
+                          fontWeight: 700,
+                          marginBottom: 4,
+                        }}
+                      >
+                        {product.name}
+                      </h3>
+                      <div
+                        style={{ fontSize: 13, color: "#9B6B5A", marginBottom: 8 }}
+                      >
+                        SKU: {product.sku} · {product.size}
+                      </div>
+                      <div
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "4px 12px",
+                          borderRadius: 999,
+                          background: product.stock > 0 ? "rgba(38,35,34,0.08)" : "rgba(239,68,68,0.1)",
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: product.stock > 0 ? "#63372C" : "#DC2626",
+                        }}
+                      >
+                        ● {product.stock > 0 ? "In Stock" : "Out of Stock"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                  >
+                    {[
+                      { label: "Price", value: `$${Number(product.price).toFixed(2)}` },
+                      { label: "Stock", value: `${product.stock} units` },
+                      { label: "Total Orders", value: `${totalOrders} orders` },
+                      { label: "Status", value: product.status },
+                    ].map((row) => (
+                      <div
+                        key={row.label}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          paddingBottom: 12,
+                          borderBottom: "1px solid rgba(201,125,96,0.08)",
+                        }}
+                      >
+                        <span style={{ fontSize: 13, color: "#9B6B5A" }}>
+                          {row.label}
+                        </span>
+                        <span
                           style={{
                             fontSize: 14,
-                            fontWeight: 500,
+                            fontWeight: 600,
                             color: "#262322",
                           }}
                         >
-                          {c.name}
-                        </div>
-                        <div style={{ fontSize: 12, color: "#9B6B5A" }}>
-                          {c.email}
-                        </div>
-                      </td>
-                      <td
+                          {row.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Edit form */}
+                <div
+                  style={{
+                    padding: 28,
+                    borderRadius: 20,
+                    background: "#fff",
+                    border: "1px solid rgba(201,125,96,0.1)",
+                    boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: "'Playfair Display', serif",
+                      color: "#262322",
+                      fontSize: 20,
+                      fontWeight: 700,
+                      marginBottom: 24,
+                    }}
+                  >
+                    Edit Product
+                  </h3>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 16 }}
+                  >
+                    {[
+                      { label: "Product Name", key: "name" as const },
+                      { label: "Price ($)", key: "price" as const },
+                      { label: "Stock Quantity", key: "stock" as const },
+                    ].map((f) => (
+                      <div key={f.label}>
+                        <label
+                          style={{
+                            display: "block",
+                            fontSize: 12,
+                            fontWeight: 500,
+                            color: "#9B6B5A",
+                            marginBottom: 6,
+                          }}
+                        >
+                          {f.label}
+                        </label>
+                        <input
+                          value={productForm[f.key]}
+                          onChange={(e) => setProductForm((prev) => ({ ...prev, [f.key]: e.target.value }))}
+                          style={{
+                            width: "100%",
+                            padding: "11px 14px",
+                            borderRadius: 10,
+                            fontSize: 14,
+                            border: "1px solid rgba(201,125,96,0.2)",
+                            background: "#F2E5D7",
+                            color: "#262322",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                    ))}
+                    <div>
+                      <label
                         style={{
-                          padding: "16px 20px",
-                          fontSize: 14,
-                          color: "#262322",
-                          fontWeight: 600,
+                          display: "block",
+                          fontSize: 12,
+                          fontWeight: 500,
+                          color: "#9B6B5A",
+                          marginBottom: 6,
                         }}
                       >
-                        {c.orders}
-                      </td>
-                      <td
+                        Description
+                      </label>
+                      <textarea
+                        rows={4}
+                        value={productForm.description}
+                        onChange={(e) => setProductForm((prev) => ({ ...prev, description: e.target.value }))}
                         style={{
-                          padding: "16px 20px",
+                          width: "100%",
+                          padding: "11px 14px",
+                          borderRadius: 10,
                           fontSize: 14,
+                          border: "1px solid rgba(201,125,96,0.2)",
+                          background: "#F2E5D7",
+                          color: "#262322",
+                          outline: "none",
+                          resize: "vertical",
+                          fontFamily: "'Inter', system-ui, sans-serif",
+                        }}
+                      />
+                    </div>
+                    <button
+                      onClick={handleSaveProduct}
+                      disabled={savingProduct}
+                      style={{
+                        padding: "13px",
+                        borderRadius: 12,
+                        fontWeight: 600,
+                        fontSize: 14,
+                        cursor: savingProduct ? "not-allowed" : "pointer",
+                        background: "linear-gradient(135deg, #C97D60, #FFBCB5)",
+                        color: "#262322",
+                        border: "none",
+                        opacity: savingProduct ? 0.6 : 1,
+                      }}
+                    >
+                      {savingProduct ? "Saving..." : "Save Changes"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Inventory alert */}
+                <div
+                  style={{
+                    gridColumn: "1 / -1",
+                    padding: 20,
+                    borderRadius: 16,
+                    background: product.stock < 100 ? "rgba(239,68,68,0.08)" : "rgba(201,125,96,0.08)",
+                    border: product.stock < 100 ? "1px solid rgba(239,68,68,0.2)" : "1px solid rgba(201,125,96,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                  }}
+                >
+                  <span style={{ fontSize: 24 }}>{product.stock < 100 ? "🚨" : "⚠️"}</span>
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        color: product.stock < 100 ? "#DC2626" : "#A0614A",
+                        fontSize: 14,
+                        marginBottom: 2,
+                      }}
+                    >
+                      {product.stock < 100 ? "Low Stock Warning" : "Low Stock Alert Threshold"}
+                    </div>
+                    <div style={{ fontSize: 13, color: product.stock < 100 ? "#DC2626" : "#9B6B5A" }}>
+                      {product.stock < 100
+                        ? `Stock is below 100 units! Current stock: ${product.stock} units — reorder soon!`
+                        : `You have set an alert when stock falls below 100 units. Current stock: ${product.stock} units — you are good!`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── CUSTOMERS TAB ── */}
+        {tab === "customers" && (
+          <>
+            {loadingCustomers && (
+              <div style={{ padding: 48, textAlign: "center", color: "#9B6B5A", fontSize: 14 }}>
+                Loading customers…
+              </div>
+            )}
+            {!loadingCustomers && (
+              <div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 20,
+                    marginBottom: 24,
+                  }}
+                >
+                  {[
+                    {
+                      icon: "👥",
+                      label: "Total Customers",
+                      value: customerStats.total.toLocaleString(),
+                      note: `${customers.length} with orders`,
+                    },
+                    {
+                      icon: "🔁",
+                      label: "Repeat Buyers",
+                      value: `${customerStats.repeatRate}%`,
+                      note: "Order 2+ times",
+                    },
+                    {
+                      icon: "⭐",
+                      label: "Active Customers",
+                      value: customers.length.toLocaleString(),
+                      note: "With at least one order",
+                    },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      style={{
+                        padding: 24,
+                        borderRadius: 20,
+                        background: "#fff",
+                        border: "1px solid rgba(201,125,96,0.1)",
+                        boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
+                      }}
+                    >
+                      <div style={{ fontSize: 28, marginBottom: 12 }}>{s.icon}</div>
+                      <div
+                        style={{
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: 28,
                           fontWeight: 700,
                           color: "#262322",
+                          marginBottom: 4,
                         }}
                       >
-                        ${c.spent}
-                      </td>
-                      <td
+                        {s.value}
+                      </div>
+                      <div
+                        style={{ fontSize: 13, color: "#9B6B5A", fontWeight: 500 }}
+                      >
+                        {s.label}
+                      </div>
+                      <div style={{ fontSize: 12, color: "#C97D60", marginTop: 4 }}>
+                        {s.note}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Customer list */}
+                <div
+                  style={{
+                    borderRadius: 20,
+                    background: "#fff",
+                    border: "1px solid rgba(201,125,96,0.1)",
+                    boxShadow: "0 2px 12px rgba(38,35,34,0.05)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr
                         style={{
-                          padding: "16px 20px",
-                          fontSize: 13,
-                          color: "#9B6B5A",
+                          background: "rgba(38,35,34,0.03)",
+                          borderBottom: "1px solid rgba(201,125,96,0.12)",
                         }}
                       >
-                        {c.last}
-                      </td>
-                      <td style={{ padding: "16px 20px" }}>
-                        {c.vip ? (
-                          <span
+                        {[
+                          "Customer",
+                          "Orders",
+                          "Spent",
+                          "Last Order",
+                          "Status",
+                        ].map((h) => (
+                          <th
+                            key={h}
                             style={{
+                              padding: "14px 20px",
+                              textAlign: "left",
                               fontSize: 12,
-                              padding: "3px 10px",
-                              borderRadius: 999,
                               fontWeight: 600,
-                              background: "rgba(201,125,96,0.12)",
-                              color: "#A0614A",
+                              color: "#9B6B5A",
+                              letterSpacing: "0.05em",
+                              textTransform: "uppercase",
                             }}
                           >
-                            ⭐ VIP
-                          </span>
-                        ) : (
-                          <span
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {customers.map((c, i) => (
+                        <tr
+                          key={c.email}
+                          style={{
+                            borderBottom:
+                              i < customers.length - 1
+                                ? "1px solid rgba(201,125,96,0.08)"
+                                : "none",
+                          }}
+                        >
+                          <td style={{ padding: "16px 20px" }}>
+                            <div
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 500,
+                                color: "#262322",
+                              }}
+                            >
+                              {c.name}
+                            </div>
+                            <div style={{ fontSize: 12, color: "#9B6B5A" }}>
+                              {c.email}
+                            </div>
+                          </td>
+                          <td
                             style={{
-                              fontSize: 12,
-                              padding: "3px 10px",
-                              borderRadius: 999,
+                              padding: "16px 20px",
+                              fontSize: 14,
+                              color: "#262322",
                               fontWeight: 600,
-                              background: "rgba(38,35,34,0.06)",
+                            }}
+                          >
+                            {c.orderCount}
+                          </td>
+                          <td
+                            style={{
+                              padding: "16px 20px",
+                              fontSize: 14,
+                              fontWeight: 700,
+                              color: "#262322",
+                            }}
+                          >
+                            ${Number(c.totalSpent).toFixed(2)}
+                          </td>
+                          <td
+                            style={{
+                              padding: "16px 20px",
+                              fontSize: 13,
                               color: "#9B6B5A",
                             }}
                           >
-                            Regular
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                            {new Date(c.lastOrderAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          </td>
+                          <td style={{ padding: "16px 20px" }}>
+                            {c.orderCount >= 3 ? (
+                              <span
+                                style={{
+                                  fontSize: 12,
+                                  padding: "3px 10px",
+                                  borderRadius: 999,
+                                  fontWeight: 600,
+                                  background: "rgba(201,125,96,0.12)",
+                                  color: "#A0614A",
+                                }}
+                              >
+                                ⭐ VIP
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  fontSize: 12,
+                                  padding: "3px 10px",
+                                  borderRadius: 999,
+                                  fontWeight: 600,
+                                  background: "rgba(38,35,34,0.06)",
+                                  color: "#9B6B5A",
+                                }}
+                              >
+                                Regular
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {customers.length === 0 && (
+                        <tr>
+                          <td colSpan={5} style={{ padding: 48, textAlign: "center", color: "#9B6B5A", fontSize: 14 }}>
+                            No customers found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
