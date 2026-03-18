@@ -7,8 +7,6 @@ export default async function CheckoutSuccess({
 }) {
   const { session_id } = await searchParams;
 
-  // Derive a display order ID from the session (shown to customer)
-  // The real order ID is generated in the webhook; here we just show a placeholder
   const displayId = session_id
     ? `LT-${session_id.slice(-5).toUpperCase()}`
     : "LT-XXXXX";
@@ -109,23 +107,43 @@ export default async function CheckoutSuccess({
             A confirmation email with your full order details has been sent.
           </p>
 
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "14px 32px",
-              borderRadius: 999,
-              fontWeight: 600,
-              fontSize: 15,
-              background: "linear-gradient(135deg, #262322, #63372C)",
-              color: "#C97D60",
-              textDecoration: "none",
-            }}
-          >
-            ← Back to Home
-          </Link>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link
+              href="/track"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 32px",
+                borderRadius: 999,
+                fontWeight: 600,
+                fontSize: 15,
+                background: "linear-gradient(135deg, #262322, #63372C)",
+                color: "#C97D60",
+                textDecoration: "none",
+              }}
+            >
+              Track Your Order
+            </Link>
+            <Link
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 32px",
+                borderRadius: 999,
+                fontWeight: 600,
+                fontSize: 15,
+                background: "transparent",
+                color: "#9B6B5A",
+                textDecoration: "none",
+                border: "1px solid #D5C4B7",
+              }}
+            >
+              ← Back to Home
+            </Link>
+          </div>
         </div>
       </div>
     </div>

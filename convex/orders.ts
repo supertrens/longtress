@@ -28,6 +28,30 @@ export const getByOrderId = query({
   },
 });
 
+export const lookup = query({
+  args: { email: v.optional(v.string()), orderId: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    if (args.orderId) {
+      const upper = args.orderId.trim().toUpperCase();
+      const orders = await ctx.db
+        .query("orders")
+        .filter((q) => q.eq(q.field("orderId"), upper))
+        .collect();
+      return orders;
+    }
+    if (args.email) {
+      const lower = args.email.trim().toLowerCase();
+      const orders = await ctx.db
+        .query("orders")
+        .withIndex("by_email", (q) => q.eq("customerEmail", lower))
+        .order("desc")
+        .collect();
+      return orders;
+    }
+    return [];
+  },
+});
+
 export const create = mutation({
   args: {
     orderId: v.string(),
@@ -91,34 +115,51 @@ export const updateStatusAndEmail = action({
     const bccEmail = process.env.RESEND_BCC_EMAIL;
     if (!resendKey || resendKey === "YOUR_RESEND_API_KEY") return;
 
-    const statusMessages: Record<
-      string,
-      { headline: string; body: string; emoji: string }
-    > = {
+    const statusConfig: Record<string, {
+      subject: string;
+      headline: string;
+      body: string;
+      icon: string;
+      accent: string;
+      tip?: string;
+    }> = {
       Processing: {
-        emoji: "⚙️",
-        headline: "Your order is being processed",
-        body: "We're preparing your Longtress Hair Oil and will ship it soon.",
+        subject: `Preparing Your Order — ${order.orderId}`,
+        icon: "&#9881;",
+        accent: "#D4A574",
+        headline: "We're Preparing Your Order",
+        body: `${order.customerName}, your Longtress Haitian Hair Oil is being carefully packaged. We'll notify you the moment it ships.`,
       },
       Shipped: {
-        emoji: "📦",
-        headline: "Your order has shipped!",
-        body: "Your Longtress Hair Oil is on its way. You'll receive it in the next few days.",
+        subject: `Your Longtress Order Has Shipped — ${order.orderId}`,
+        icon: "&#128230;",
+        accent: "#7BA68C",
+        headline: "Your Order is On Its Way",
+        body: `${order.customerName}, your Longtress Haitian Hair Oil has shipped and is en route to you. Keep an eye on your doorstep.`,
+        tip: "While you wait, prepare for your first application: wash and towel-dry your hair so the oil can absorb deeply into your scalp.",
       },
       Delivered: {
-        emoji: "✅",
-        headline: "Your order has been delivered!",
-        body: "We hope you love your Longtress Haitian Hair Oil. Thank you for your support!",
+        subject: `Your Longtress Has Arrived — ${order.orderId}`,
+        icon: "&#10024;",
+        accent: "#D4A574",
+        headline: "Your Longtress Has Arrived",
+        body: `${order.customerName}, your order has been delivered. Your journey to healthier, stronger hair starts today.`,
+        tip: "For best results, apply 2–3 times per week to your scalp and ends. Consistent use over 4–8 weeks delivers the most transformative results.",
       },
       Cancelled: {
-        emoji: "❌",
-        headline: "Your order has been cancelled",
-        body: "Your order has been cancelled. If you have questions, please contact us.",
+        subject: `Order Cancelled — ${order.orderId} | Longtress`,
+        icon: "&mdash;",
+        accent: "#A67C6B",
+        headline: "Order Cancelled",
+        body: `${order.customerName}, your order has been cancelled. If this was a mistake or you have questions, please reach out — we're here to help.`,
       },
     };
 
-    const msg = statusMessages[args.status];
-    if (!msg) return;
+    const cfg = statusConfig[args.status];
+    if (!cfg) return;
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://longtress.com";
+    const trackUrl = `${baseUrl}/track`;
 
     await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -130,32 +171,18 @@ export const updateStatusAndEmail = action({
         from: fromEmail,
         to: order.customerEmail,
         ...(bccEmail ? { bcc: bccEmail } : {}),
-        subject: `${msg.emoji} Order ${order.orderId} — ${args.status} | Longtress`,
-        html: `<!DOCTYPE html>
-<html><head><meta charset="utf-8"/></head>
-<body style="margin:0;padding:0;background:#FBF6F0;font-family:'Inter',system-ui,sans-serif;">
-  <div style="max-width:560px;margin:40px auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(92,42,10,0.08);">
-    <div style="background:#5C2A0A;padding:32px;text-align:center;">
-      <div style="font-family:Georgia,serif;color:#C89B3C;font-size:24px;font-weight:700;letter-spacing:0.1em;">LONGTRESS</div>
-    </div>
-    <div style="padding:40px 32px;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">${msg.emoji}</div>
-      <h1 style="font-family:Georgia,serif;color:#5C2A0A;font-size:24px;margin:0 0 12px;">${msg.headline}</h1>
-      <p style="color:#9B6535;font-size:14px;line-height:1.7;margin:0 0 24px;">
-        Hi ${order.customerName}, ${msg.body}
-      </p>
-      <div style="background:#FBF6F0;border-radius:12px;padding:16px 20px;display:inline-block;">
-        <div style="font-size:12px;color:#9B6535;">Order <strong style="color:#5C2A0A;">${order.orderId}</strong> · $${order.total.toFixed(2)}</div>
-      </div>
-      <p style="font-size:13px;color:#9B6535;margin-top:32px;">
-        Questions? <a href="mailto:support@longtress.com" style="color:#C89B3C;">support@longtress.com</a>
-      </p>
-    </div>
-    <div style="background:#FBF6F0;padding:20px;text-align:center;border-top:1px solid rgba(200,155,60,0.1);">
-      <div style="font-size:12px;color:#9B6535;">© 2025 Longtress · Haitian Hair Oil</div>
-    </div>
-  </div>
-</body></html>`,
+        subject: cfg.subject,
+        html: statusEmailHtml({
+          headline: cfg.headline,
+          body: cfg.body,
+          icon: cfg.icon,
+          accent: cfg.accent,
+          orderId: order.orderId,
+          total: order.total,
+          status: args.status,
+          trackUrl,
+          tip: cfg.tip,
+        }),
       }),
     });
   },
@@ -214,3 +241,97 @@ export const customers = query({
     return { customers, stats: { total, repeatBuyers, repeatRate } };
   },
 });
+
+function statusEmailHtml(p: {
+  headline: string;
+  body: string;
+  icon: string;
+  accent: string;
+  orderId: string;
+  total: number;
+  status: string;
+  trackUrl: string;
+  tip?: string;
+}) {
+  const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+  const currentIdx = steps.indexOf(p.status);
+  const cancelled = p.status === "Cancelled";
+
+  const progressHtml = steps
+    .map((step, i) => {
+      const done = !cancelled && i <= currentIdx;
+      const dotColor = done ? p.accent : "#3A332D";
+      const lineColor = !cancelled && i > 0 && i <= currentIdx ? p.accent : "#2A2420";
+      return `<td style="text-align:center;padding:0 2px;">
+        ${i > 0 ? `<div style="height:2px;background:${lineColor};margin-bottom:6px;border-radius:1px;"></div>` : `<div style="height:2px;margin-bottom:6px;"></div>`}
+        <div style="width:10px;height:10px;border-radius:50%;background:${dotColor};margin:0 auto;${done ? "box-shadow:0 0 8px " + p.accent + "40;" : ""}"></div>
+        <div style="font-size:10px;color:${done ? "#BFA88A" : "#4A3F35"};margin-top:6px;letter-spacing:0.05em;">${step}</div>
+      </td>`;
+    })
+    .join("");
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#1A1412;font-family:Georgia,'Times New Roman',serif;">
+<div style="max-width:600px;margin:0 auto;">
+
+  <!-- Header -->
+  <div style="background:#1A1412;padding:48px 40px 24px;text-align:center;">
+    <div style="font-size:13px;letter-spacing:0.3em;color:#8B7355;text-transform:uppercase;margin-bottom:8px;">est. 2025 &middot; Haiti</div>
+    <div style="font-size:32px;font-weight:700;letter-spacing:0.15em;color:#D4A574;">LONGTRESS</div>
+    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#8B7355,transparent);margin:16px auto 0;"></div>
+  </div>
+
+  <!-- Status Banner -->
+  <div style="background:linear-gradient(135deg,#2A1F18,#3D2B1E);padding:40px;text-align:center;border-top:1px solid rgba(212,165,116,0.15);">
+    <div style="width:64px;height:64px;border-radius:50%;border:2px solid ${p.accent};display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;">
+      <span style="font-size:28px;color:${p.accent};">${p.icon}</span>
+    </div>
+    <h1 style="font-size:26px;font-weight:400;color:#F5EDE3;margin:0 0 12px;letter-spacing:0.02em;">${p.headline}</h1>
+    <p style="font-size:15px;color:#BFA88A;margin:0;line-height:1.7;max-width:440px;display:inline-block;">${p.body}</p>
+  </div>
+
+  <!-- Progress Bar -->
+  ${!cancelled ? `<div style="background:#221A14;padding:28px 40px;border-top:1px solid rgba(212,165,116,0.1);">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>${progressHtml}</tr></table>
+  </div>` : ""}
+
+  <!-- Order Info -->
+  <div style="background:#1A1412;padding:24px 40px;border-top:1px solid rgba(212,165,116,0.1);">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8B7355;">Order No.</td>
+      <td style="text-align:right;font-size:16px;font-weight:700;color:#D4A574;letter-spacing:0.06em;">${p.orderId}</td>
+    </tr><tr>
+      <td style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8B7355;padding-top:8px;">Total</td>
+      <td style="text-align:right;font-size:16px;font-weight:700;color:#F5EDE3;padding-top:8px;">$${p.total.toFixed(2)}</td>
+    </tr></table>
+  </div>
+
+  ${p.tip ? `<!-- Tip -->
+  <div style="background:#221A14;padding:24px 40px;border-top:1px solid rgba(212,165,116,0.1);">
+    <table cellpadding="0" cellspacing="0"><tr>
+      <td style="font-size:18px;padding-right:14px;vertical-align:top;color:#D4A574;">&#9758;</td>
+      <td>
+        <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#8B7355;margin-bottom:4px;">Pro Tip</div>
+        <div style="font-size:14px;color:#BFA88A;line-height:1.7;">${p.tip}</div>
+      </td>
+    </tr></table>
+  </div>` : ""}
+
+  <!-- Track CTA -->
+  <div style="background:#1A1412;padding:32px 40px;text-align:center;border-top:1px solid rgba(212,165,116,0.1);">
+    <a href="${p.trackUrl}" style="display:inline-block;padding:14px 44px;background:linear-gradient(135deg,#D4A574,#C4915E);color:#1A1412;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:4px;">Track Order</a>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:#1A1412;padding:28px 40px;text-align:center;border-top:1px solid rgba(212,165,116,0.08);">
+    <p style="font-size:13px;color:#6B5B4A;margin:0 0 12px;">
+      Questions? <a href="mailto:support@longtress.com" style="color:#D4A574;text-decoration:none;">support@longtress.com</a>
+    </p>
+    <div style="width:40px;height:1px;background:rgba(212,165,116,0.2);margin:12px auto;"></div>
+    <div style="font-size:11px;color:#4A3F35;letter-spacing:0.1em;">&copy; 2025 LONGTRESS &middot; Haitian Hair Oil</div>
+  </div>
+
+</div>
+</body></html>`;
+}

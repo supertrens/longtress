@@ -74,11 +74,8 @@ export const fulfillCheckout = internalAction({
           .filter(Boolean)
           .join("<br/>");
 
-        const itemRow = `<tr>
-          <td style="padding:10px 0;color:#5C2A0A;font-size:14px;">Longtress Haitian Hair Oil 120mL</td>
-          <td style="padding:10px 0;color:#9B6535;font-size:14px;text-align:center;">&times;${qty}</td>
-          <td style="padding:10px 0;color:#5C2A0A;font-size:14px;text-align:right;font-weight:600;">$${(qty * unitPrice).toFixed(2)}</td>
-        </tr>`;
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://longtress.com";
+        const trackUrl = `${baseUrl}/track`;
 
         await fetch("https://api.resend.com/emails", {
           method: "POST",
@@ -90,66 +87,161 @@ export const fulfillCheckout = internalAction({
             from: fromEmail,
             to: meta.customer_email,
             ...(bccEmail ? { bcc: bccEmail } : {}),
-            subject: `Order Confirmed — ${orderId} | Longtress`,
-            html: `<!DOCTYPE html>
-<html><head><meta charset="utf-8"/></head>
-<body style="margin:0;padding:0;background:#FBF6F0;font-family:'Inter',system-ui,sans-serif;">
-  <div style="max-width:560px;margin:40px auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(92,42,10,0.08);">
-    <div style="background:#5C2A0A;padding:32px;text-align:center;">
-      <div style="font-family:Georgia,serif;color:#C89B3C;font-size:24px;font-weight:700;letter-spacing:0.1em;">LONGTRESS</div>
-      <div style="color:rgba(249,243,232,0.5);font-size:12px;margin-top:4px;">Haitian Hair Oil</div>
-    </div>
-    <div style="padding:40px 32px;">
-      <div style="text-align:center;margin-bottom:32px;">
-        <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#C89B3C,#E8B848);display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;">&#10003;</div>
-        <h1 style="font-family:Georgia,serif;color:#5C2A0A;font-size:26px;margin:0 0 8px;">Order Confirmed!</h1>
-        <p style="color:#9B6535;font-size:14px;margin:0;">Hi ${meta.customer_name}, your order is on its way.</p>
-      </div>
-      <div style="background:#FBF6F0;border-radius:12px;padding:16px 20px;margin-bottom:24px;">
-        <div style="font-size:12px;color:#9B6535;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Order ID</div>
-        <div style="font-size:18px;font-weight:700;color:#5C2A0A;">${orderId}</div>
-      </div>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
-        <tr style="border-bottom:1px solid rgba(200,155,60,0.15);">
-          <th style="text-align:left;padding-bottom:8px;font-size:11px;color:#9B6535;text-transform:uppercase;letter-spacing:0.06em;">Item</th>
-          <th style="text-align:center;padding-bottom:8px;font-size:11px;color:#9B6535;text-transform:uppercase;letter-spacing:0.06em;">Qty</th>
-          <th style="text-align:right;padding-bottom:8px;font-size:11px;color:#9B6535;text-transform:uppercase;letter-spacing:0.06em;">Price</th>
-        </tr>
-        ${itemRow}
-        <tr style="border-top:1px solid rgba(200,155,60,0.15);">
-          <td colspan="2" style="padding:8px 0;font-size:13px;color:#9B6535;">Subtotal</td>
-          <td style="padding:8px 0;font-size:13px;color:#9B6535;text-align:right;">$${subtotal.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:4px 0;font-size:13px;color:#9B6535;">Shipping (${meta.shipping_method})</td>
-          <td style="padding:4px 0;font-size:13px;color:#9B6535;text-align:right;">${shippingCost === 0 ? "FREE" : "$" + shippingCost.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:4px 0;font-size:13px;color:#9B6535;">Tax</td>
-          <td style="padding:4px 0;font-size:13px;color:#9B6535;text-align:right;">$${tax.toFixed(2)}</td>
-        </tr>
-        <tr style="border-top:2px solid rgba(200,155,60,0.2);">
-          <td colspan="2" style="padding:12px 0;font-size:16px;font-weight:700;color:#5C2A0A;font-family:Georgia,serif;">Total</td>
-          <td style="padding:12px 0;font-size:18px;font-weight:700;color:#C89B3C;text-align:right;">$${total.toFixed(2)}</td>
-        </tr>
-      </table>
-      <div style="border:1px solid rgba(200,155,60,0.15);border-radius:12px;padding:16px 20px;margin-bottom:32px;">
-        <div style="font-size:11px;color:#9B6535;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Shipping To</div>
-        <div style="font-size:14px;color:#5C2A0A;line-height:1.7;">${addressLine}</div>
-      </div>
-      <p style="font-size:13px;color:#9B6535;line-height:1.7;text-align:center;">
-        Questions? Reply to this email or contact us at<br/>
-        <a href="mailto:support@longtress.com" style="color:#C89B3C;">support@longtress.com</a>
-      </p>
-    </div>
-    <div style="background:#FBF6F0;padding:24px;text-align:center;border-top:1px solid rgba(200,155,60,0.1);">
-      <div style="font-size:12px;color:#9B6535;">&copy; 2025 Longtress &middot; Haitian Hair Oil</div>
-    </div>
-  </div>
-</body></html>`,
+            subject: `Your Longtress Order is Confirmed — ${orderId}`,
+            html: confirmationEmailHtml({
+              customerName: meta.customer_name ?? "",
+              orderId,
+              qty,
+              unitPrice,
+              subtotal,
+              shippingCost,
+              shippingMethod: meta.shipping_method ?? "standard",
+              tax,
+              total,
+              addressLine,
+              trackUrl,
+            }),
           }),
         });
       }
     }
   },
 });
+
+function confirmationEmailHtml(p: {
+  customerName: string;
+  orderId: string;
+  qty: number;
+  unitPrice: number;
+  subtotal: number;
+  shippingCost: number;
+  shippingMethod: string;
+  tax: number;
+  total: number;
+  addressLine: string;
+  trackUrl: string;
+}) {
+  const shippingLabel = p.shippingMethod === "express" ? "Express (2–3 days)" : "Standard (5–7 days)";
+  return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#1A1412;font-family:Georgia,'Times New Roman',serif;">
+<div style="max-width:600px;margin:0 auto;">
+
+  <!-- Header -->
+  <div style="background:#1A1412;padding:48px 40px 36px;text-align:center;">
+    <div style="font-size:13px;letter-spacing:0.3em;color:#8B7355;text-transform:uppercase;margin-bottom:8px;">est. 2025 &middot; Haiti</div>
+    <div style="font-size:32px;font-weight:700;letter-spacing:0.15em;color:#D4A574;">LONGTRESS</div>
+    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#8B7355,transparent);margin:16px auto 0;"></div>
+  </div>
+
+  <!-- Confirmation Banner -->
+  <div style="background:linear-gradient(135deg,#2A1F18,#3D2B1E);padding:40px;text-align:center;border-top:1px solid rgba(212,165,116,0.15);">
+    <div style="width:64px;height:64px;border-radius:50%;border:2px solid #D4A574;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;">
+      <span style="font-size:28px;color:#D4A574;">&#10003;</span>
+    </div>
+    <h1 style="font-size:28px;font-weight:400;color:#F5EDE3;margin:0 0 10px;letter-spacing:0.02em;">Order Confirmed</h1>
+    <p style="font-size:15px;color:#BFA88A;margin:0;line-height:1.6;">
+      Thank you, ${p.customerName}. Your journey to healthier, stronger hair begins now.
+    </p>
+  </div>
+
+  <!-- Order ID -->
+  <div style="background:#221A14;padding:20px 40px;border-top:1px solid rgba(212,165,116,0.1);border-bottom:1px solid rgba(212,165,116,0.1);display:flex;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#8B7355;">Order No.</td>
+      <td style="text-align:right;font-size:18px;font-weight:700;color:#D4A574;letter-spacing:0.06em;">${p.orderId}</td>
+    </tr></table>
+  </div>
+
+  <!-- Items -->
+  <div style="background:#1A1412;padding:32px 40px;">
+    <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B7355;margin-bottom:20px;">Your Order</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr style="border-bottom:1px solid rgba(212,165,116,0.1);">
+        <td style="padding:16px 0;">
+          <div style="font-size:16px;color:#F5EDE3;font-weight:400;">Longtress Haitian Hair Oil</div>
+          <div style="font-size:13px;color:#8B7355;margin-top:4px;">120 mL &middot; Cold-Pressed &middot; Qty: ${p.qty}</div>
+        </td>
+        <td style="padding:16px 0;text-align:right;font-size:16px;color:#D4A574;font-weight:600;">$${(p.qty * p.unitPrice).toFixed(2)}</td>
+      </tr>
+    </table>
+
+    <!-- Totals -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
+      <tr>
+        <td style="padding:6px 0;font-size:14px;color:#8B7355;">Subtotal</td>
+        <td style="padding:6px 0;font-size:14px;color:#BFA88A;text-align:right;">$${p.subtotal.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 0;font-size:14px;color:#8B7355;">Shipping (${shippingLabel})</td>
+        <td style="padding:6px 0;font-size:14px;color:#BFA88A;text-align:right;">${p.shippingCost === 0 ? "Complimentary" : "$" + p.shippingCost.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 0;font-size:14px;color:#8B7355;">Tax</td>
+        <td style="padding:6px 0;font-size:14px;color:#BFA88A;text-align:right;">$${p.tax.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-top:12px;border-top:1px solid rgba(212,165,116,0.15);"></td>
+      </tr>
+      <tr>
+        <td style="padding:8px 0;font-size:18px;color:#F5EDE3;">Total</td>
+        <td style="padding:8px 0;font-size:22px;font-weight:700;color:#D4A574;text-align:right;">$${p.total.toFixed(2)}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Shipping Address -->
+  <div style="background:#221A14;padding:28px 40px;border-top:1px solid rgba(212,165,116,0.1);">
+    <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B7355;margin-bottom:12px;">Shipping To</div>
+    <div style="font-size:14px;color:#BFA88A;line-height:1.8;">${p.addressLine}</div>
+  </div>
+
+  <!-- Track Order CTA -->
+  <div style="background:#1A1412;padding:36px 40px;text-align:center;border-top:1px solid rgba(212,165,116,0.1);">
+    <a href="${p.trackUrl}" style="display:inline-block;padding:16px 48px;background:linear-gradient(135deg,#D4A574,#C4915E);color:#1A1412;font-size:14px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:4px;">Track Your Order</a>
+    <p style="font-size:13px;color:#6B5B4A;margin:20px 0 0;">
+      Or enter your order ID at <a href="${p.trackUrl}" style="color:#D4A574;text-decoration:underline;">${p.trackUrl.replace(/https?:\/\//, "")}</a>
+    </p>
+  </div>
+
+  <!-- What to Expect -->
+  <div style="background:#221A14;padding:32px 40px;border-top:1px solid rgba(212,165,116,0.1);">
+    <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B7355;margin-bottom:16px;text-align:center;">What to Expect</div>
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding:8px 16px 8px 0;font-size:20px;vertical-align:top;width:36px;">&#9758;</td>
+        <td style="padding:8px 0;">
+          <div style="font-size:14px;color:#F5EDE3;font-weight:600;">Apply to scalp &amp; ends</div>
+          <div style="font-size:13px;color:#8B7355;margin-top:2px;">2&ndash;3 times per week for best results</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:8px 16px 8px 0;font-size:20px;vertical-align:top;">&#10024;</td>
+        <td style="padding:8px 0;">
+          <div style="font-size:14px;color:#F5EDE3;font-weight:600;">See results in 1&ndash;2 weeks</div>
+          <div style="font-size:13px;color:#8B7355;margin-top:2px;">Noticeable moisture, shine &amp; reduced breakage</div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:8px 16px 8px 0;font-size:20px;vertical-align:top;">&#128170;</td>
+        <td style="padding:8px 0;">
+          <div style="font-size:14px;color:#F5EDE3;font-weight:600;">Full transformation in 4&ndash;8 weeks</div>
+          <div style="font-size:13px;color:#8B7355;margin-top:2px;">Thicker, stronger, longer hair</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:#1A1412;padding:32px 40px;text-align:center;border-top:1px solid rgba(212,165,116,0.08);">
+    <p style="font-size:13px;color:#6B5B4A;margin:0 0 12px;">
+      Questions? <a href="mailto:support@longtress.com" style="color:#D4A574;text-decoration:none;">support@longtress.com</a>
+    </p>
+    <div style="width:40px;height:1px;background:rgba(212,165,116,0.2);margin:16px auto;"></div>
+    <div style="font-size:11px;color:#4A3F35;letter-spacing:0.1em;">&copy; 2025 LONGTRESS &middot; Haitian Hair Oil</div>
+    <div style="font-size:11px;color:#3A332D;margin-top:4px;">Crafted with care in Haiti</div>
+  </div>
+
+</div>
+</body></html>`;
+}
